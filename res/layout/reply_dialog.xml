@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:background="@drawable/rounded_rectangle_bg" >
+
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:layout_width="@dimen/attach_file_image_size"
+            android:layout_height="@dimen/attach_file_image_size"
+            android:src="@drawable/reply_btn" />
+
+        <TextView
+            android:id="@+id/reply_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/layout_vertical_margin"
+            android:text="reply"
+            android:textColor="?android:attr/textColorPrimaryInverse" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/reply_list"
+        android:layout_below="@+id/top_bar"
+        android:layout_above="@+id/input_bar"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/reply_list" />
+    <include
+        android:id="@+id/empty_list_view"
+        android:layout_below="@+id/top_bar"
+        android:layout_above="@+id/input_bar"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        layout="@layout/empty_list_alternative_view" />
+	<ProgressBar 
+	    android:id="@+id/list_progress"
+	    android:layout_below="@+id/top_bar"
+	    android:layout_above="@+id/input_bar"
+	    android:layout_centerInParent="true"
+	    android:layout_marginTop="8dp"
+	    android:visibility="gone"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"/>
+	
+    <LinearLayout
+        android:id="@+id/input_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background_with_shadow"
+        android:paddingTop="@dimen/layout_vertical_margin" 
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal"
+        android:animateLayoutChanges="true"
+        android:weightSum="9">
+
+        <EditText
+            android:id="@+id/input_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:layout_gravity="bottom"
+            android:background="@android:color/background_light"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:hint="@string/reply_hint"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/input_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="right"
+            android:background="@drawable/button"
+            android:text="@string/reply_button_text"
+            android:textColor="@android:color/white" 
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</RelativeLayout>

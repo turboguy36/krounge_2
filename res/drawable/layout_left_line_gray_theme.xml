@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+      <shape 
+        android:shape="rectangle">
+        	<!-- 구분 선 -->
+            <stroke android:width="1dp" android:color="#ff000000" />
+        </shape>
+   </item>
+   
+   <item android:left="1dp">
+   <!-- 라인을 넣고 싶은 위치에 표시  -->
+        
+      <shape 
+        android:shape="rectangle">
+            <!-- 바탕 색과 똑같은 색 -->
+            <solid android:color="#aaffffff"/>
+        </shape>
+   </item>
+
+</layer-list>

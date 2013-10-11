@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 1. BACKGROUND COLOR -->
+    <color name="contentBG">#FFFFFF</color>
+    <color name="tabsBG">#FFCFDDE8</color>
+    <color name="basic_background">#AACFDDE8</color>
+    <color name="bottomContentBG">#AADDDDDD</color>
+    <color name="tab_background">#FF4484B7</color>
+    <color name="popup_background">#55CFDDE8</color>
+    <color name="titlebackgroundcolor">#FF4484B7</color>
+    <color name="bar_softkeyboard_attach">#DD302b24</color>
+    <color name="reply_bottom_bar">#33302b24</color>
+    <color name="file_view_seperator_line">#aa20dafa</color>
+    <color name="file_search_view_background">#fffbfbfb</color>
+    <color name="list_divider">#ccaaaaaa</color>
+    <color name="dialog_bg">#55000000</color>
+    
+    <!-- 2. TEXT COLOR -->
+    <color name="textcolor_disable">#FF818181</color>
+    <color name="textcolor_enable">#FFFFFFFF</color>
+    <color name="thickString">#FF000000</color>
+    <color name="lightString">#FF757575</color>
+    <color name="brightString">#FFFFFFFF</color>
+    <color name="bodyString">#FF777777</color>
+    <color name="link_color">#FF14148C</color>
+    <color name="visited_link_color">#FF8C008C</color>
+    <color name="text_color_label">#FF0064FF</color>
+    <color name="text_color_hint">#AA757575</color>
+    <color name="hint_login">#55FFFFFF</color>
+    <color name="version_color">#d8494b</color>
+    <color name="slim_string">#AA111111</color>
+    
+    <!-- 3. BUTTON COLOR -->
+    <color name="inactive_group">#FF767676</color>
+    <color name="color_active_group">#FF1e83ce</color>
+    <color name="btn_disabled">#FFCDCDCD</color>
+    
+    <!-- 4. ETC COLOR -->
+    <color name="grid_state_pressed">#BB7dbcd3</color>
+    <color name="grid_state_focused">#777dbcd3</color>
+    <color name="media_controller_text_color">#FFFFFF</color>
+    <color name="media_controller_bg_color">#000000</color>
+    <color name="titleColor">#FF017572</color>
+    
+    
+</resources>

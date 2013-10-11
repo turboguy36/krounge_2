@@ -1,0 +1,2 @@
+Manifest minSdkVersion 이 11 인 이유
+HomeFragment 의 setQueryHint() 때문.

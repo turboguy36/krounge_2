@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/moretab"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tabsBG"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MoreTab" >
+
+    <ImageView
+        android:id="@+id/tabmore_logo"
+        android:layout_width="100dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/icon_klounge_big" />
+
+    <TextView
+        android:id="@+id/text_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/text_version"
+        android:textColor="@color/version_color"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/numtext_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:text="@string/text_version_num"
+        android:textColor="@color/version_color"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/text_recent_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="19dp"
+        android:text="@string/text_cur_version"
+        android:textColor="@color/thickString"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/numtext_recent_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:text="Loading..."
+        android:textColor="@color/thickString"
+        android:textSize="25sp" />
+
+</LinearLayout>

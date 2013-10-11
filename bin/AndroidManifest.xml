@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="kr.co.ktech.cse"
+    android:versionCode="253"
+    android:versionName="0.2.5.3" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="16" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="kr.co.ktech.cse.permission.C2D_MESSAGE" />
+
+    <permission
+        android:name="kr.co.ktech.cse.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <application
+        android:name=".KloungeApplication"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:theme="@style/customTheme" >
+        <activity
+            android:name=".activity.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ReplyActivity"
+            android:label="reply"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".activity.KLoungeMainTabs" >
+        </activity>
+        <activity
+            android:name=".activity.KLoungeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.KLoungeMsg"
+            android:label="@string/title_activity_klounge_msg" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_splash"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+        <activity
+            android:name=".activity.KLoungeGroupList"
+            android:label="@string/title_activity_group_list" />
+        <activity
+            android:name=".activity.WriteMessage"
+            android:label="@string/title_activity_wirte_message"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.MyLounge"
+            android:label="@string/title_activity_my_lounge" />
+        <activity
+            android:name=".activity.PersonalLounge"
+            android:label="@string/title_activity_personal_lounge" />
+        <activity
+            android:name=".activity.DialogActivity"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".activity.MoreTabActivityStack" />
+        <activity android:name=".activity.GroupListActivityStack" />
+        <activity android:name=".activity.TextViewActivity" />
+        <activity
+            android:name=".activity.AttachedDownloadManager"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".util.FileDownloadManager"
+            android:theme="@style/fileDownloadDialogTheme" />
+        <activity android:name=".activity.MoreTab" />
+        <activity
+            android:name=".activity.TouchImageViewActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+        <activity
+            android:name=".activity.TouchUserImageViewActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+        <activity
+            android:name=".activity.EditImageViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+
+        <!--
+                투명 / 불투명 화면을 만들고 싶다면 
+            	android:theme="@style/Theme.Transparent
+        -->
+        <activity
+            android:name=".bitmapfun.ui.ImageGridActivity"
+            android:label="Grid Activity" />
+        <activity
+            android:name=".activity.PopupMessage"
+            android:theme="@style/fileDownloadDialogTheme" >
+        </activity>
+        <activity android:name=".activity.AppInformation" />
+        <activity
+            android:name=".activity.Myprofile"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".activity.CropActivity" />
+        
+        <activity 
+            android:name=".activity.ReplyViewDialog"
+            android:theme="@style/Theme.Transparent" />
+        
+        <activity android:name=".util.DownloadProgress" />
+        <activity android:name=".util.DownloadImage" />
+        <activity
+            android:name=".util.StarRatingDialog"
+            android:theme="@style/fileDownloadDialogTheme" />
+        <activity
+            android:name=".activity.FileSearchListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Sherlock.Light" />
+
+        <receiver
+            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="kr.co.ktech.cse" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".GCMIntentService" >
+        </service>
+    </application>
+
+</manifest>

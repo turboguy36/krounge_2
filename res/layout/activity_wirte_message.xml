@@ -1,0 +1,122 @@
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/WriteMessageLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tabsBG"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" >
+
+        <TextView
+            android:id="@+id/to_group_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/group_all"
+            android:textColor="@color/text_color_label"
+            android:textSize="15sp"
+            tools:context=".WirteMessage" />
+
+        <EditText
+            android:id="@+id/input_message_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="25dp"
+            android:background="@color/contentBG"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="@string/hint_message"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:textColor="@color/thickString"
+            android:textColorHint="@color/text_color_hint">
+            <requestFocus />
+        </EditText>
+
+        <RelativeLayout
+            android:id="@+id/bottomBarLayout"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bar_softkeyboard_attach"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
+
+            <Button
+                android:id="@+id/add_mov_button"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/take_picture_button"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/mov_btn"
+                android:gravity="right|center"
+                android:paddingRight="8dp"
+                android:text="@string/text_mov_file"
+                android:textColor="@color/bar_softkeyboard_attach"
+                android:textSize="16sp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/take_picture_button"
+                android:layout_width="65dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="3dp"
+                android:layout_toRightOf="@+id/add_image_button"
+                android:background="@drawable/take_picture_btn"
+                android:gravity="right|center"
+                android:paddingRight="10dp"
+                android:text="@string/text_take_picture"
+                android:textColor="@color/bar_softkeyboard_attach"
+                android:visibility="visible"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/add_image_button"
+                android:layout_width="65dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/add_image_btn"
+                android:gravity="right|center"
+                android:paddingRight="10dp"
+                android:text="@string/pic_file"
+                android:textColor="@color/bar_softkeyboard_attach"
+                android:textSize="16sp" />
+	
+            <Button
+                android:id="@+id/go_message_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:background="@drawable/button"
+                android:text="@string/send_button_text"
+                android:textColor="@color/textcolor_disable" />
+            
+        </RelativeLayout>
+        <ImageView 
+            android:id="@+id/attached_pic_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="50dp"
+            android:visibility="gone"
+            android:src="@drawable/icon_klounge_big"
+            android:background="@drawable/imageview_border"/>
+        
+    </FrameLayout>
+
+</LinearLayout>

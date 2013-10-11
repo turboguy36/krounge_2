@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/file_search_view_background">
+
+    <FrameLayout 
+        android:id="@+id/user_image_file_content_view_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+		
+        <ImageView
+            android:id="@+id/user_image_file_content_view"
+            android:layout_width="@dimen/image_thumbnail_size"
+            android:layout_height="@dimen/image_thumbnail_size"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:maxHeight="@dimen/image_thumbnail_size"
+            android:maxWidth="@dimen/image_thumbnail_size"
+            android:scaleType="fitXY"
+            android:src="@drawable/no_photo" />
+        <View
+		    android:layout_width="@dimen/image_thumbnail_size"
+            android:layout_height="@dimen/image_thumbnail_size"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:maxHeight="@dimen/image_thumbnail_size"
+            android:maxWidth="@dimen/image_thumbnail_size"
+		    android:background="@drawable/rounded_shape"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/user_info_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/user_image_file_content_view_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/post_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/layout_vertical_margin"
+            android:text="puser name"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/posted_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_vertical_margin"
+            android:text="written date"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/posted_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_vertical_margin"
+            android:text="3 읽음"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</RelativeLayout>

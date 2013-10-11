@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/one_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/contentBG">
+
+    <include
+        android:id="@+id/writer_photo"
+        layout="@layout/user_photo_round" />
+
+    <TextView
+        android:id="@+id/writer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/writer_photo"
+        android:layout_toRightOf="@+id/writer_photo"
+        android:background="@drawable/reply_txt_selector"
+        android:paddingLeft="7dp"
+        android:textColor="@color/link_color"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/written_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/writer_photo"
+        android:layout_toRightOf="@+id/writer_photo"
+        android:paddingBottom="2dp"
+        android:paddingLeft="7dp"
+        android:textColor="@color/lightString"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/msg_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/writer_photo"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/writer_photo"
+        android:textColor="@color/thickString"
+        android:textSize="14sp" />
+
+    <FrameLayout
+        android:id="@+id/added_img_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/msg_body"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:paddingBottom="5dp"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/added_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitStart"
+            android:src="@drawable/no_picture" />
+
+        <ImageButton
+            android:id="@+id/added_play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/play_video_btn_selector"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <include
+        android:id="@+id/bottom_bar_layout"
+        layout="@layout/content_bottom" />
+
+    <View
+	    android:layout_width="match_parent"
+	    android:layout_height="@dimen/activity_vertical_margin"
+	    android:layout_below="@+id/bottom_bar_layout"
+	    android:layout_alignParentBottom="true"
+	    android:background="@color/tabsBG"/>
+    
+    <View android:id="@+id/arg1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+    <View android:id="@+id/arg2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+</RelativeLayout>

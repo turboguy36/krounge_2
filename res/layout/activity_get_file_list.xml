@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="4" >
+    <Button 
+	    android:id="@+id/all_search"
+	    android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:background="@drawable/button_selector_with_selected_state"
+	    android:text="@string/all_shared_text"/>
+	<Button 
+	    android:id="@+id/public_search"
+	    android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:background="@drawable/button_selector_with_selected_state"
+	    android:text="@string/public_text"/>
+	<Button 
+	    android:id="@+id/group_search"
+	    android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:background="@drawable/button_selector_with_selected_state"
+	    android:text="@string/group_text"/>
+	<Button 
+	    android:id="@+id/private_search"
+	    android:layout_width="0dp"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:background="@drawable/button_selector_with_selected_state"
+	    android:text="@string/private_text"/>
+        
+    </LinearLayout>
+	
+    <include
+        android:id="@+id/file_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_bar"
+        layout="@layout/list" />
+
+</RelativeLayout>

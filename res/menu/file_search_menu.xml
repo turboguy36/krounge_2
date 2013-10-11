@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/share_button"
+        android:icon="@drawable/social_send_now"
+        android:showAsAction="always"
+        android:title="@string/share"
+        android:visible="true">
+    </item>
+</menu>

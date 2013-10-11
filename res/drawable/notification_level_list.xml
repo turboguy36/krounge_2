@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:drawable="@drawable/download_animation"
+        android:maxLevel="0"/>
+    <item
+        android:drawable="@drawable/download_anim"
+        android:maxLevel="1"/>
+	<item
+        android:drawable="@drawable/alerts_and_states_warning"
+        android:maxLevel="2"/>
+</level-list>

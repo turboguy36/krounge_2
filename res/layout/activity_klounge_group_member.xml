@@ -1,0 +1,93 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/klounge_group_member_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tabsBG"
+    android:orientation="vertical" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/krounge_group_name_table"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/contentBG"
+        android:stretchColumns="1" >
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp" >
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight=".1"
+                android:src="@drawable/cross_expand01" />
+
+            <TextView
+                android:id="@+id/klounge_group_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight=".6"
+                android:textColor="@color/thickString"
+                android:textSize="17sp" />
+
+            <ImageView
+                android:id="@+id/view_group_message"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:layout_weight=".1"
+                android:src="@drawable/balloon_active" />
+
+            <TextView
+                android:id="@+id/klounge_group_total_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                
+                android:background="@drawable/textbox_selector"
+                android:gravity="center"
+                android:layout_weight=".2"
+                android:text="group_total_number"
+                android:textColor="@color/brightString"
+                android:textSize="17sp" />
+        </TableRow>
+    </TableLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/tabsBG" />
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" >
+
+        <GridView
+            android:id="@+id/klounge_group_member_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/contentBG"
+            android:columnWidth="@dimen/image_thumbnail_size"
+            android:gravity="center"
+            android:horizontalSpacing="@dimen/image_thumbnail_spacing"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="@dimen/image_thumbnail_spacing"  >
+        </GridView>
+    </android.support.v7.widget.GridLayout>
+
+</LinearLayout>

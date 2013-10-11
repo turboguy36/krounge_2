@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="parent_menu">
+        <item>프로필</item>
+        <item>알림 설정</item>
+        <item>@string/app_name_ko</item>
+    </string-array>
+    <string-array name="tab_names">
+        <item>그룹SNS</item>
+        <item>내라운지</item>
+        <item>그룹</item>
+        <item>더보기</item>
+    </string-array>
+
+    <integer-array name="tab_icons">
+        <item>@drawable/tab_icon_klounge</item>
+        <item>@drawable/tab_icon_mylounge</item>
+        <item>@drawable/tab_icon_mylounge</item>
+        <item>@drawable/tab_icon_more</item>
+    </integer-array>
+
+    <string-array name="user_information">
+        <item>내정보</item>
+        <item>로그아웃</item>
+    </string-array>
+    <string-array name="app_information">
+        <item>개인정보 보호정책</item>
+        <item>이용 약관</item>
+        <item>오픈소스 라이센스</item>
+        <item>버젼정보</item>
+    </string-array>
+    <string-array name="popup_settings">
+        <item>알림 설정</item>
+    </string-array>
+    <string-array name="popup_detail_settings">
+        <item>알림 사용</item>
+        <item>알림 시 팝업으로 보기</item>
+        <item>그룹 SNS 알림</item>
+        <item>소리로 알림</item>
+        <item>진동으로 알림</item>
+    </string-array>
+    <string-array name="file_category">
+        <item>전체공개</item>
+        <item>그룹공개</item>
+        <item>개인자료</item>
+    </string-array>
+	<string-array name="reply_dialog">
+	    <item>@string/reply_delete</item>
+	    <item>@string/post_reply</item>
+	    <item>@string/text_cancel</item>
+	</string-array>
+</resources>

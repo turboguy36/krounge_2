@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LoginLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tabsBG"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/tvAppName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:src="@drawable/login_logo" />
+
+    <ImageView
+        android:id="@+id/copylight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/copylight" />
+
+    <ImageView
+        android:id="@+id/ivLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/copylight"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dip"
+        android:src="@drawable/btn_login_brown" />
+
+    <FrameLayout
+        android:id="@+id/pwd_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ivLogin" 
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dip"
+        android:layout_marginTop="7dp">
+
+        <EditText
+            android:id="@+id/etPasswd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:ems="10"
+            android:hint="비밀번호"
+            android:inputType="textPassword"
+            android:paddingBottom="4dp"
+            android:paddingLeft="18dp"
+            android:paddingTop="4dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/hint_login"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/remove_all_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/remove_button_selector"
+            android:src="@drawable/navigation_cancel_dark"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/id_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/pwd_frame"
+        android:layout_centerHorizontal="true" >
+
+        <EditText
+            android:id="@+id/etID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:ems="10"
+            android:hint="아이디"
+            android:paddingBottom="4dp"
+            android:paddingLeft="18dp"
+            android:paddingTop="4dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/hint_login"
+            android:textSize="17sp" >
+
+            <requestFocus />
+        </EditText>
+
+        <ImageView
+            android:id="@+id/remove_all_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/remove_button_selector"
+            android:src="@drawable/navigation_cancel_dark"/>
+    </FrameLayout>
+
+</RelativeLayout>

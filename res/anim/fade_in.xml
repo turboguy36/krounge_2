@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<alpha xmlns:android="http://schemas.android.com/apk/res/android"
+	android:interpolator="@android:anim/accelerate_interpolator"
+	android:fromAlpha="0.0"
+	android:toAlpha="1.0"
+	android:duration="800"
+	/>  
+
+<!--
+    interpolator : 안드로이드에서 인터폴레이터는 애니메이션의 변화 정도를 정의
+           이 값을 조정하여 애니메이션을 가속시킬 수도 있고, 감속시킬 수도 있으며 반복시킬수도 있음
+    fromAlpha : 애니메이션 시작
+    toAlpha : 애니메이션 끝
+           알파값 : 0.0 (완전투명) ~ 1.0(완전 불투명)
+    duration : 애니메이션이 진행되는데 "지연시간 (밀리세컨드)"
+           참조 클래스 : android.viewanimation.AlphaAnimaiton
+
+-->

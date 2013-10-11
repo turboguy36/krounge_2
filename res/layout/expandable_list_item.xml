@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/expandable_list_oneline"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/contentBG" >
+
+    <ImageView
+        android:id="@+id/expandable_list_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
+
+    <LinearLayout
+        android:id="@+id/expandable_list_text_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/expandable_list_indicator"
+        android:layout_toRightOf="@+id/expandable_list_icon" 
+        android:layout_marginRight="80dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/expandable_list_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="text"
+            android:textColor="@color/thickString"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/expandable_list_subtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="sub text"
+            android:textColor="@color/link_color"
+            android:textSize="13sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/expandable_list_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" />
+
+    <CheckBox
+        android:id="@+id/expandable_list_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:checked="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/expandable_list_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:visibility="gone" />
+
+</RelativeLayout>
