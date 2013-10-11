@@ -43,7 +43,7 @@ public class BaseActivity extends SherlockFragmentActivity{
 
 		// customize the Action Bar Sherlock
 		aBar = getSupportActionBar();
-		
+		aBar.setLogo(R.drawable.back_btn_selector);
 //		aBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 //		aBar.setCustomView(R.layout.file_search_custom_action_bar);
 	}
