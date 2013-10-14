@@ -28,24 +28,15 @@ import android.os.Vibrator;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import kr.co.ktech.cse.R;
 import kr.co.ktech.cse.CommonUtilities;
-import kr.co.ktech.cse.R.id;
 import kr.co.ktech.cse.activity.AttachedDownloadManager;
 import kr.co.ktech.cse.activity.KLoungeActivity;
-import kr.co.ktech.cse.activity.KLoungeMsg;
 import kr.co.ktech.cse.activity.MyLounge;
 import kr.co.ktech.cse.activity.PersonalLounge;
-import kr.co.ktech.cse.activity.ReplyActivity;
 import kr.co.ktech.cse.activity.ReplyViewDialog;
 import kr.co.ktech.cse.AppConfig;
 import kr.co.ktech.cse.bitmapfun.util.ImageFetcher;
@@ -62,42 +53,17 @@ import static kr.co.ktech.cse.CommonUtilities.FLAG_IF_REDIRECT_LINK;
 
 public class MessageLayoutSetting{
 	private final int MAIN_MESSAGE = 1;
-	private final int REPLY_MESSAGE = 0;
 	
 	private final int REPLY_BADGEVIEW_ID = 90082;
-	private final int TEXTVIEW_DELETE_ID = 9009;
-
-	private final int REPLY_RL_HEAD_LEFT = 9014;
-	private final int REPLY_RL_HEAD = 9015;
-	private final int REPLY_USER_IMG = 9016;
-	private final int REPLY_USER_NAME = 9017;
-	private final int REPLY_TOUSER_NAME = 9018;
-	private final int REPLY_BODY = 9019;
-	private final int REPLY_WRITE_DATE = 9020;
-	private final int REPLY_GO_WRITE_REPLY = 9021;
-
-	private final int REPLY_USER_IMG_ID = 0;
-	private final int REPLY_USER_NAME_ID = 0;
-	private final int REPLY_TOUSER_NAME_ID = 1;
-	private final int REPLY_BODY_ID = 2;
-	private final int REPLY_WRITE_DATE_ID = 3;
-	private final int REPLY_GO_WRITE_REPLY_ID = 0;
-	private final int REPLY_DELETE_BTN_ID = 1;
-
-	private static final int MESSAGE_REPLY_TEXT_SIZE = 12;
-	private static final int MESSAGE_IMAGE_MAX_WIDTH = 70;
 
 	public final int REPLY_TAIL_HEIGHT = 50;
-	private SnsAppInfo sns_info;
 	private Context context;
 	
 	private LinearLayout baseLinearLayout;
-	private EditText etReplyText;
 	final String TO_REPLY_MARK = "@";
 	final String SEPARATOR= " ";
 	final int REPLY_POST_ID_TAG = 1;
 
-	private DisplayUtil du;
 	AsyncTask<Void, Void, Void> mTask;
 
 	private int totalMessage;
@@ -117,7 +83,6 @@ public class MessageLayoutSetting{
 
 		this.context = context;
 		this.baseLinearLayout = linear;
-		du = new DisplayUtil(context);
 		totalMessage = 0;
 	}
 
@@ -128,392 +93,6 @@ public class MessageLayoutSetting{
 	public void setTotalMessage(int totalMessage) {
 		this.totalMessage = totalMessage;
 	}
-
-	/*------------------------------------R--E--P--L--Y _ V--I--E--W _  A--C--T--I--V--I--T--Y---------------------------------------------------------*/
-	/*
-	 * baseRelativeLayout
-	 * 	|_ rl
-	 * 	   |_ rl_tail
-	 */
-	// 댓글을 클릭했을 때의 댓글의 레이아웃(본문 제외)
-	public void setReplyLayout(final Context context, SnsAppInfo snsInfo, ImageFetcher mImageFetcher) {
-		this.sns_info = snsInfo;
-
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-		RelativeLayout rl = new RelativeLayout(context); //하나의 글
-		RelativeLayout rl_head = new RelativeLayout(context);
-		rl_head.setId(REPLY_RL_HEAD);
-
-		RelativeLayout rl_head_left = new RelativeLayout(context); // 상단 댓글( repler_photo, repler_name, reply_toWhom_name, etc...)
-		rl_head_left.setId(REPLY_RL_HEAD_LEFT);
-
-		RelativeLayout rl_tail = new RelativeLayout(context); // 아래의 bar (댓글달기, 삭제)
-		LinearLayout linear_head_right = new LinearLayout(context);
-
-		ImageView repler_photo = new ImageView(context);
-		repler_photo.setId(REPLY_USER_IMG);
-		TextView repler_name = new TextView(context);
-		repler_name.setId(REPLY_USER_NAME);
-		TextView reply_toWhom_name = new TextView(context);
-		reply_toWhom_name.setId(REPLY_TOUSER_NAME);
-		TextView reply_body = new TextView(context);
-		reply_body.setId(REPLY_BODY);
-		TextView reply_date = new TextView(context);
-		reply_date.setId(REPLY_WRITE_DATE);
-		Button go_write_reply = new Button(context);
-		go_write_reply.setId(REPLY_GO_WRITE_REPLY);
-		ImageButton btn_reply = new ImageButton(context);
-		btn_reply.setId(TEXTVIEW_DELETE_ID);
-		try{
-			make_repler_photo(repler_photo, mImageFetcher, snsInfo, rl_head_left);
-		}catch(NullPointerException n){
-			Log.e(TAG, ""+n);
-		}
-		make_reply_body(repler_name, reply_toWhom_name, reply_body, reply_date, snsInfo, linear_head_right, rl_head_left.getId());
-		make_reply_tail(go_write_reply, btn_reply, snsInfo, rl_tail, rl_head.getId());
-
-		rl_head.addView(rl_head_left);
-		rl_head.addView(linear_head_right);
-
-		rl.addView(rl_head);
-		rl.addView(rl_tail);
-
-		baseLinearLayout.setLayoutParams(params);
-		baseLinearLayout.addView(rl);
-
-	}
-
-	boolean make_reply_tail(Button go_write_reply, ImageButton btn_reply, final SnsAppInfo snsInfo, RelativeLayout parent, int upper_parent_id){
-		boolean result = false;
-		int left = 0;
-		int top = 0;
-		int right = 0;
-		int bottom = 0;
-		RelativeLayout.LayoutParams params = null;
-
-		// 댓글 달기 버튼
-		String reply_text = "댓글";
-		go_write_reply.setText(reply_text);
-		params = new RelativeLayout.LayoutParams(
-				ViewGroup.LayoutParams.WRAP_CONTENT,
-				ViewGroup.LayoutParams.MATCH_PARENT);
-
-		params.setMargins(left, top, right, bottom);
-		params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-		params.addRule(RelativeLayout.BELOW, REPLY_USER_IMG);
-		params.addRule(RelativeLayout.CENTER_VERTICAL);
-		go_write_reply.setLayoutParams(params);
-
-		go_write_reply.setTextSize(TypedValue.COMPLEX_UNIT_SP, MESSAGE_REPLY_TEXT_SIZE);
-		go_write_reply.setTextColor(context.getResources().getColor(R.color.thickString));
-
-		go_write_reply.setBackgroundResource(R.drawable.reply_txt_selector);
-
-		left = du.PixelToDP(30);
-		top = du.PixelToDP(15);
-		right = du.PixelToDP(30);
-		bottom = du.PixelToDP(15);
-		go_write_reply.setPadding(left, top, right, bottom);
-		left = 0;
-		right = 0;
-		top = 0;
-		bottom = 0;
-
-		go_write_reply.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				try {
-					LinearLayout inputbox = (LinearLayout)v.getRootView().findViewById(R.id.inputReplyBox);
-					if(inputbox.getVisibility() > 0){
-						inputbox.setVisibility(0);
-					}
-
-					etReplyText = (EditText)v.getRootView().findViewById(R.id.reply_text);
-					if(etReplyText != null) {
-						etReplyText.setText(TO_REPLY_MARK+snsInfo.getUserName()+SEPARATOR);
-						etReplyText.setTag(snsInfo);
-						etReplyText.setSelection(etReplyText.length());
-
-						etReplyText.requestFocus();
-						if(etReplyText.isFocusable()) {
-							InputMethodManager mInputMethodManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-							mInputMethodManager.showSoftInput(etReplyText, InputMethodManager.SHOW_IMPLICIT);
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}								
-			}
-		});
-		parent.addView(go_write_reply, REPLY_GO_WRITE_REPLY_ID);
-
-		//		params.addRule(RelativeLayout.BELOW, REPLY_USER_IMG);
-		// 삭제
-		if(snsInfo.getUserId() == AppUser.user_id) {
-			params = null;
-			//			int delBtn_size = du.PixelToDP(MESSAGE_DEL_IMAGE_MAX_WIDTH);
-			params = new RelativeLayout.LayoutParams(
-					ViewGroup.LayoutParams.WRAP_CONTENT,
-					ViewGroup.LayoutParams.MATCH_PARENT);
-			left = 0;
-			top = 0;
-			right = 0;
-			bottom = 0;
-			params.setMargins(left, top, right, bottom);
-			params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-			params.addRule(RelativeLayout.CENTER_VERTICAL);
-
-			btn_reply.setLayoutParams(params);
-			//			btn_reply.setBackgroundResource(R.drawable.button_line_with_img);
-
-			replyDelButton(btn_reply, snsInfo.getUserId(), snsInfo.getPostId(),  REPLY_MESSAGE);
-			// making delete button event
-
-			parent.addView(btn_reply, REPLY_DELETE_BTN_ID);
-		}
-
-		RelativeLayout.LayoutParams parent_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		parent_params.addRule(RelativeLayout.BELOW, upper_parent_id);
-		parent.setLayoutParams(parent_params);
-
-		parent.setBackgroundColor(context.getResources().getColor(R.color.bottomContentBG));
-
-		return result;
-	}
-
-	private boolean replyDelButton(ImageButton ivDelete, final int user_id, final int post_id, final int r) {
-		boolean result = false;
-		ivDelete.setTag(sns_info.getPostId());
-		ivDelete.setImageResource(R.drawable.navigation_cancel);
-		ivDelete.setBackgroundResource(R.drawable.reply_txt_selector);
-		ivDelete.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Log.i("message delete", user_id+" / "+ post_id);
-
-				mTask = new AsyncTask<Void, Void, Void>() {
-					@Override
-					protected Void doInBackground(Void... params) {
-						try {
-							// DB 삭제 처리 추가
-							KLoungeRequest kreq = new KLoungeRequest();
-							kreq.deleteMessage(user_id, post_id, r);
-
-							Thread.sleep(50);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						return null;
-					}
-
-					@Override
-					protected void onPostExecute(Void result) {
-						if(r == MAIN_MESSAGE) {
-
-						} else if(r == REPLY_MESSAGE){
-							for(int i=0; i<baseLinearLayout.getChildCount(); i++) {
-
-								View tv = (View)baseLinearLayout.getChildAt(i).findViewById(TEXTVIEW_DELETE_ID);
-								Integer id = 0;
-								try{
-									id = (Integer)tv.getTag();
-								}catch(NullPointerException n){
-									Log.e(TAG, "NULL POINTER EXCEPTION "+i+"st."+n);
-								}
-								int tag_post_id = id.intValue();
-								Log.i("tag_post_id", String.valueOf(tag_post_id));
-								if(tag_post_id==post_id) {
-									Log.i("delete index", String.valueOf(i));
-									try{
-										baseLinearLayout.removeViewAt(i);
-									}catch(ClassCastException c){
-										c.printStackTrace();
-									}
-
-									break;
-								}
-							}		
-						}
-						mTask = null;
-					}
-
-				};
-
-				AlertDialog.Builder alertDlg = new AlertDialog.Builder(context);
-				alertDlg.setTitle("확인");
-				alertDlg.setMessage("삭제 하시겠습니까?");
-				alertDlg.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						mTask.execute(null, null, null);
-					}
-				});
-				alertDlg.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				});
-				alertDlg.show();
-			}
-		});
-		return result;
-	}
-
-	private boolean make_reply_body(TextView repler_name, TextView reply_toUser_name, 
-			TextView reply_body, TextView reply_date, final SnsAppInfo snsInfo, LinearLayout parent, int left_parent_id) throws NullPointerException{
-
-		int left = du.PixelToDP(0);
-		int top = 0;
-		int right = 0;
-		int bottom = 0;
-		RelativeLayout.LayoutParams params = null;
-		final String img_url = snsInfo.getPhoto().replace(" ", "%20");
-
-		boolean result = false;
-		String name = snsInfo.getUserName();
-		String to_user_name = snsInfo.getReply_to_user_name();
-		String body =KLoungeFormatUtil.bodyURLFormat(snsInfo.getBody()).toString();
-		String date = snsInfo.getWrite_date();
-
-		// name
-		repler_name.setText(name);
-		params = new RelativeLayout.LayoutParams(
-				ViewGroup.LayoutParams.WRAP_CONTENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.RIGHT_OF, REPLY_USER_IMG);
-		params.setMargins(left, top, right, bottom);
-		repler_name.setLayoutParams(params);
-		repler_name.setTextColor(context.getResources().getColor(R.color.link_color));
-		repler_name.setBackgroundResource(R.drawable.reply_txt_selector);
-		repler_name.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(context, PersonalLounge.class);
-				String user_id = String.valueOf(snsInfo.getUserId());
-				String user_name = snsInfo.getUserName();
-				String user_photo = img_url;
-				intent.putExtra("puser_id", user_id);
-				intent.putExtra("puser_name", user_name);
-				intent.putExtra("puser_photo", user_photo);
-				context.startActivity(intent);
-
-			}
-		});
-		params = null;
-		params = new RelativeLayout.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		params.setMargins(left, top, right, bottom);
-		params.addRule(RelativeLayout.RIGHT_OF, REPLY_USER_IMG);
-
-		// to user name
-		//		Log.d(TAG, isToUserName(to_user_name)+"/"+to_user_name);
-		if(isToUserName(to_user_name)){
-			reply_toUser_name.setText("To. "+to_user_name);
-			params.addRule(RelativeLayout.BELOW, repler_name.getId());
-			reply_toUser_name.setLayoutParams(params);
-			reply_toUser_name.setTextColor(context.getResources().getColor(R.color.bodyString));
-			reply_toUser_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-		}else{		
-		}
-
-		params = null;
-		params = new RelativeLayout.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		params.setMargins(left, top, right, bottom);
-		params.addRule(RelativeLayout.RIGHT_OF, REPLY_USER_IMG);
-
-
-		//body
-		if(isToUserName(to_user_name)){
-			//			Log.d(TAG, "TRUE");
-			params.addRule(RelativeLayout.BELOW, reply_toUser_name.getId());
-		}else{
-			//			Log.d(TAG, "FALSE");
-			params.addRule(RelativeLayout.BELOW, repler_name.getId());
-		}
-		reply_body.setLayoutParams(params);
-
-		reply_body.setText(Html.fromHtml(body));
-		reply_body.setMovementMethod(LinkMovementMethod.getInstance());
-		reply_body.setTextColor(context.getResources().getColor(R.color.slim_string));
-		reply_body.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-
-		params = null;
-		params = new RelativeLayout.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		params.setMargins(left, top, right, bottom);
-		params.addRule(RelativeLayout.RIGHT_OF, REPLY_USER_IMG);
-
-		// date
-		reply_date.setText(date);
-		params.addRule(RelativeLayout.BELOW, reply_body.getId());
-		reply_date.setLayoutParams(params);
-
-		RelativeLayout.LayoutParams linearParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-		parent.setOrientation(LinearLayout.VERTICAL);
-		linearParams.addRule(RelativeLayout.RIGHT_OF, left_parent_id);
-		parent.setLayoutParams(linearParams);
-
-		parent.addView(repler_name, REPLY_USER_NAME_ID);
-		parent.addView(reply_toUser_name, REPLY_TOUSER_NAME_ID);
-		parent.addView(reply_body, REPLY_BODY_ID);
-		parent.addView(reply_date, REPLY_WRITE_DATE_ID);
-		parent.setBackgroundColor(context.getResources().getColor(R.color.contentBG));
-		return result;
-	}
-	private boolean isToUserName(String toUser){
-		boolean result = false;
-		if(toUser.length() != 0){
-			//			Log.d(TAG,toUser.length()+"");
-			result = true;
-		}
-		return result;
-	}
-	private boolean make_repler_photo(ImageView repler_photo, 
-			ImageFetcher imageFetcher, final SnsAppInfo snsInfo, RelativeLayout parent) throws NullPointerException{
-
-		boolean result = false;
-		int imgView_size = du.PixelToDP(MESSAGE_IMAGE_MAX_WIDTH);
-		//		int imgView_height = du.PixelToDP(MESSAGE_IMAGE_MAX_HEIGHT);
-		RelativeLayout.LayoutParams params = 
-				new RelativeLayout.LayoutParams(imgView_size, imgView_size);
-		int left, top, right, bottom;
-
-		final String img_url = snsInfo.getPhoto().replace(" ", "%20");
-
-		left = du.PixelToDP(5);
-		top = du.PixelToDP(5);
-		right = du.PixelToDP(5);
-		bottom = du.PixelToDP(5);
-
-		params.setMargins(left, top, right, bottom);
-		params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-		imageFetcher.loadImage(img_url, repler_photo);
-
-		repler_photo.setAdjustViewBounds(true);
-		repler_photo.setLayoutParams(params);
-		repler_photo.setScaleType(ImageView.ScaleType.FIT_XY);
-
-		repler_photo.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(context, PersonalLounge.class);
-				String user_id = String.valueOf(snsInfo.getUserId());
-				String user_name = snsInfo.getUserName();
-				String user_photo = img_url;
-				intent.putExtra("puser_id", user_id);
-				intent.putExtra("puser_name", user_name);
-				intent.putExtra("puser_photo", user_photo);
-				context.startActivity(intent);
-			}
-		});
-		parent.addView(repler_photo, REPLY_USER_IMG_ID);
-		parent.setBackgroundColor(context.getResources().getColor(R.color.contentBG));
-		return result;
-	}
-	
-	/*-------------------------------------------------------------------------------------------------*/
 
 	public void setMessageContentUsingRelativeLayout(final SnsAppInfo snsinfo, 
 			ImageFetcher mImageFetcher,final int puser_id, final int group_id){
@@ -585,11 +164,11 @@ public class MessageLayoutSetting{
 				attachLayout.setOnClickListener(attach_layout_click_listener);
 
 				String displayMsg = htmlmessage;
-				displayMsg = displayMsg.replaceAll("<[^>]*>","");
-				displayMsg = displayMsg.replaceAll("&nbsp;", "");
-				displayMsg = displayMsg.replaceAll("&amp;", "&");
-				displayMsg = displayMsg.replaceAll("&gt;", "<");
-				displayMsg = displayMsg.replaceAll("&lt;", ">");
+//				displayMsg = displayMsg.replaceAll("<[^>]*>","");
+//				displayMsg = displayMsg.replaceAll("&nbsp;", "");
+//				displayMsg = displayMsg.replaceAll("&amp;", "&");
+//				displayMsg = displayMsg.replaceAll("&gt;", "<");
+//				displayMsg = displayMsg.replaceAll("&lt;", ">");
 				msg.setText(displayMsg);
 			}
 		}
@@ -783,22 +362,6 @@ public class MessageLayoutSetting{
 		}
 	}
 
-	private class DisplayUtil {
-		private static final float DEFAULT_HDIP_DENSITY_SCALE = 1.5f;
-
-		private final float scale;
-
-		public DisplayUtil(Context context) {
-			scale = context.getResources().getDisplayMetrics().density;
-		}
-		public int PixelToDP(int pixel) {
-			return (int) (pixel / DEFAULT_HDIP_DENSITY_SCALE * scale);
-		}
-		public int DPToPixel(final Context context, int DP) {
-			return (int) (DP / scale * DEFAULT_HDIP_DENSITY_SCALE);
-		}
-	}
-
 	class DeleteTask extends AsyncTask<Void, Void, Boolean>{
 		SnsAppInfo snsinfo;
 		int cur_group_id;
@@ -870,9 +433,6 @@ public class MessageLayoutSetting{
 					}else if(context instanceof MyLounge){
 						remote_addr.append("&type=mylounge");
 					}
-//					else{
-//						그룹 SNS 에서 메시지 새로 받아 올 때
-//					}
 					
 					StringBuilder json = new StringBuilder();
 					try {
@@ -938,7 +498,6 @@ public class MessageLayoutSetting{
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			final SnsAppInfo snsinfo = (SnsAppInfo)v.getTag(R.id.arg1);
 			final int group_id = (Integer)v.getTag(R.id.arg2); 
 			AlertDialog.Builder alertDlg = new AlertDialog.Builder(context);
@@ -965,7 +524,6 @@ public class MessageLayoutSetting{
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			SnsAppInfo snsinfo = (SnsAppInfo)v.getTag();
 			String attach = snsinfo.getAttach();
 			vibrator.vibrate(VIBRATE_PERIOD);
@@ -991,7 +549,6 @@ public class MessageLayoutSetting{
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			SnsAppInfo snsinfo = (SnsAppInfo)v.getTag();
 			vibrator.vibrate(VIBRATE_PERIOD);
 			// 새로운 창 추가
@@ -1022,7 +579,6 @@ public class MessageLayoutSetting{
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			String added_imageurl = (String)v.getTag();
 			playVideo(added_imageurl);
 		}
@@ -1031,7 +587,6 @@ public class MessageLayoutSetting{
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			int pid = (Integer)v.getTag();
 			vibrator.vibrate(VIBRATE_PERIOD);
 			new GetFileTask().execute(pid);
@@ -1041,7 +596,6 @@ public class MessageLayoutSetting{
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			if(!context.getClass().equals(PersonalLounge.class)){
 				SnsAppInfo snsinfo = (SnsAppInfo)v.getTag(R.id.arg1);
 				int puser_id = (Integer)v.getTag(R.id.arg2);
