@@ -131,7 +131,7 @@
 	<string name="attached_keyword_title"><b>키워드</b></string>
 	<string name="sorry_no_attach">첨부된 파일이 없습니다.</string>
 	<string name="file_query_hint">자료 보관함 검색</string>
-	<string name="share">보내기</string>
+	<string name="share">공유하기</string>
 	<string name="be_read_count">읽음</string>
 	<string name="rating_title"><b>K-Rounge 별점</b></string>
 	<string name="rating_button">별점 주기</string>
@@ -140,6 +140,8 @@
 	<!-- Share Data Group SNS -->
 	<string name="share_group_sns">그룹 SNS 공유</string>
 	<string name="select_group">그룹 선택</string>
+	<string name="select_group_dialog_title">공유할 그룹 선택</string>
+	<string name="where_to_post">공유 할 그룹명 :</string>
 	
 	<!-- Personal Lounge Fragment -->
 	<string name = "lounge_of_whom"><i>님의 라운지</i></string>
