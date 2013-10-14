@@ -26,7 +26,6 @@ public class SpinAdapter extends ArrayAdapter<GroupInfo> {
 	private Context context;
 	private String TAG = SpinAdapter.class.getSimpleName();
 
-	//	private List<GroupInfo> group_list;
 	private GroupInfo[] ginfo;
 
 	private List<WeakReference<View>> mRecycleList = new ArrayList<WeakReference<View>>();
@@ -56,14 +55,13 @@ public class SpinAdapter extends ArrayAdapter<GroupInfo> {
 
 	@Override
 	public int getCount() {
-		return ginfo.length;//group_list.size();
+		return ginfo.length;
 	}
 	@Override
 	public GroupInfo getItem(int position) {
-		//        return group_list.get(position);
 		GroupInfo result = null;
 		try{
-			result = ginfo[position];//group_list.get(position);
+			result = ginfo[position];
 		}catch(ArrayIndexOutOfBoundsException a){
 			Log.e(TAG, "ArrayIndexOutOfBoundsException: "+a);
 			return new GroupInfo();

@@ -119,7 +119,8 @@ public class HomeFragment extends SherlockFragment implements OnItemClickListene
 //		TextView title_view = (TextView)aBar.getCustomView().findViewById(R.id.title);
 //		title_view.setText(getActivity().getResources().getString(R.string.file_search_button_text));
 		aBar.setTitle(getActivity().getResources().getString(R.string.file_search_button_text));
-
+		aBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		
 		View v = inflater.inflate(R.layout.activity_get_file_list, null);
 		listview = (ListView)v.findViewById(R.id.file_list);
 		listview.setOnItemClickListener(this);

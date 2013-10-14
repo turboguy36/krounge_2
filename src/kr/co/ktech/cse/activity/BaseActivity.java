@@ -43,7 +43,9 @@ public class BaseActivity extends SherlockFragmentActivity{
 
 		// customize the Action Bar Sherlock
 		aBar = getSupportActionBar();
-		aBar.setLogo(R.drawable.back_btn_selector);
+		aBar.setLogo(R.drawable.icon_klounge_small);
+//		aBar.setDisplayHomeAsUpEnabled(true);
+		
 //		aBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 //		aBar.setCustomView(R.layout.file_search_custom_action_bar);
 	}
@@ -52,8 +54,7 @@ public class BaseActivity extends SherlockFragmentActivity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			Log.d(TAG, "home click~!");
-			finish();
+			onBackPressed();
 			return true;
 		
 		default:

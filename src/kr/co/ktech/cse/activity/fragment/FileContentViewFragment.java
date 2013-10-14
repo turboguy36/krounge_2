@@ -110,7 +110,7 @@ public class FileContentViewFragment extends SherlockFragment implements OnClick
 //		title_view.setText(content_title);
 //		title_view.setSelected(true);
 		aBar.setTitle(content_title);
-		
+		aBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		// file 이름을 title 로 한다. 
 		// selected 로 해 놓아야 만약에 title 이 길어 지면 
 		// marquee 효과를 낼 수 있다.
