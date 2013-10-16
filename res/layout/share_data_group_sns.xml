@@ -4,19 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/contentBG" >
     
-	<TextView
-	    android:id="@+id/where_to_post"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:text="@string/where_to_post"
-	    android:textSize="@dimen/text_size_middle"/>
-	
     <TextView
         android:id="@+id/group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/where_to_post"
-        android:layout_alignBaseline="@+id/where_to_post"
+        android:layout_marginLeft="@dimen/layout_vertical_margin"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
         android:textSize="@dimen/text_size_large" />
 
     <LinearLayout

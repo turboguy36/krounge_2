@@ -141,7 +141,10 @@
 	<string name="share_group_sns">그룹 SNS 공유</string>
 	<string name="select_group">그룹 선택</string>
 	<string name="select_group_dialog_title">공유할 그룹 선택</string>
-	<string name="where_to_post">공유 할 그룹명 :</string>
+	<string name="where_to_post">공유 할 그룹명을 선택하세요.</string>
+	<string name="confirm_send_message">전송 하시겠습니까?</string>
+	<string name="share_data_sending">메시지 전송중&#8230;</string>
+	<string name="send_dialog_title">그룹 SNS 공유</string>
 	
 	<!-- Personal Lounge Fragment -->
 	<string name = "lounge_of_whom"><i>님의 라운지</i></string>
