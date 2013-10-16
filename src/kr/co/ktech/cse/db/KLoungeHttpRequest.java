@@ -173,7 +173,6 @@ public class KLoungeHttpRequest {
 
 	public boolean executeHttpPost(String url, ArrayList<NameValuePair> nameValuePairs, boolean file) {
 		boolean result = false;
-		//ArrayList<NameValuePair> nameValuePairs = new  ArrayList<NameValuePair>();
 		String returnString = null;
 
 		BasicHttpParams httpParams = new BasicHttpParams();

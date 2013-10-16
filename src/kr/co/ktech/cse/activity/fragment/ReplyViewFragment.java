@@ -64,8 +64,8 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 	private RelativeLayout base_view;
 	private int THIS_POST_ID;
 
-	// @ 를 사용 해 유저를 태그 하고 글 작성 중인지 판별
-	private boolean IS_WRITING_REPLY = false;
+	// 유저를 태그 하고 글 작성 중인지 판별
+	private boolean IS_WRITING_REPLY_TO_USER = false;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -132,7 +132,7 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 		switch(v.getId()){
 		case R.id.input_button:
 			SnsAppInfo sinfo = (SnsAppInfo)v.getTag();
-			new SendMessageTask().execute(sinfo);
+			new SendMessageTask().execute(sinfo.getPostId(), sinfo.getSuperId(), sinfo.getGroupId(), sinfo.getPuser_id(), sinfo.getGroup_name());
 			break;
 		}
 	}
@@ -140,23 +140,24 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 	@Override
 	public void onItemClick(AdapterView<?> parent, View v, int position, long lPosition) {
 		// TODO Auto-generated method stub
-		final SnsAppInfo sinfo = (SnsAppInfo)parent.getItemAtPosition(position);
+		final SnsAppInfo replyPostInfo = (SnsAppInfo)parent.getItemAtPosition(position);
 
-		if(sinfo.getUserId() == AppUser.user_id){
+		if(replyPostInfo.getUserId() == AppUser.user_id){
 			// 내가 post 한 댓글이라면 (댓글 삭제, 댓글 달기, 취소) 
 			AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
 			
-			setAlertDialogOnClickMyPost(dialog, sinfo);
+			setAlertDialogOnClickMyPost(dialog, replyPostInfo);
 			
 			dialog.show();
 		}else{
 			// @ to_user_name 을 붙여서 post 할 수 있게 해 줘야
-			String name_to = sinfo.getUserName();
-			int post_id = sinfo.getPostId();
+			String name_to = replyPostInfo.getUserName();
+			int post_id = replyPostInfo.getPostId();
 			
 			setToUserTagBox(name_to, post_id);
 		}
 	}
+	
 	private void setToUserTagBox(String name_to, int post_id){
 		EditText input_text = (EditText)base_view.findViewById(R.id.input_text);
 		ToReplyInfo rInfo = new ToReplyInfo(name_to, post_id, mActivity);
@@ -173,14 +174,13 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 			InputMethodManager imm  = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 		}
-		
-		IS_WRITING_REPLY = true;
-		
+		IS_WRITING_REPLY_TO_USER = true;
 		input_text.setTag(rInfo);
 	}
 	
 	private void setAlertDialogOnClickMyPost(AlertDialog.Builder dialog, 
 			final SnsAppInfo sinfo){
+		// 내가 쓴 댓글을 클릭 했을 때
 		String [] dialog_items = getActivity().getResources().getStringArray(R.array.reply_dialog);
 		
 		dialog.setCancelable(true);
@@ -232,8 +232,8 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 				LayoutParams text_param = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 9f);
 				text_view.setLayoutParams(text_param);
 
-				if(IS_WRITING_REPLY){
-					IS_WRITING_REPLY = false;	
+				if(IS_WRITING_REPLY_TO_USER){
+					IS_WRITING_REPLY_TO_USER = false;	
 				}
 			}
 		}
@@ -258,7 +258,7 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 		result = matcher.find();
 		return result;
 	}
-	private class SendMessageTask extends AsyncTask<SnsAppInfo, String, List<SnsAppInfo>>{
+	private class SendMessageTask extends AsyncTask<Object, String, List<SnsAppInfo>>{
 		KLoungeRequest kloungehttp;
 		String reply_body;
 		ProgressDialog progress;
@@ -285,48 +285,63 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 		protected void onProgressUpdate(String... values) {
 			// TODO Auto-generated method stub
 			super.onProgressUpdate(values);
-			//			progress.setMessage(values[0]);
 			TextView message_view = (TextView)dialog_custom_view.findViewById(R.id.dialog_message);
 			message_view.setText(values[0]);
 		}
 
 		@Override
-		protected List<SnsAppInfo> doInBackground(SnsAppInfo... params) {
+		protected List<SnsAppInfo> doInBackground(Object... params) {
 			// TODO Auto-generated method stub
 			List<SnsAppInfo> replyResultList;
-			SnsAppInfo sinfo = params[0];
-			int reply_post_id = sinfo.getPostId();
 			
-			if(IS_WRITING_REPLY){
+			int parent_post_id = (Integer) params[0];
+			int super_post_id = (Integer) params[1];
+			int groupId = (Integer) params[2];
+			int puser_id = (Integer) params[3];
+			String group_name = (String) params[4];
+			
+			int reply_post_id = super_post_id;
+			
+			if(IS_WRITING_REPLY_TO_USER){
 				EditText input_text = (EditText)base_view.findViewById(R.id.input_text);
 				ToReplyInfo rInfo = (ToReplyInfo)input_text.getTag();
+				//setToUserTagBox(...) 에서 input_text.setTag(rInfo);
 			
 				// reply box 안에 있는 이름을 잘라 낸다.
 				reply_body = reply_body.substring(rInfo.getTo_user_length());
 				
+				// reply_to 를 등록 할 상위 포스트 셋팅
 				reply_post_id = rInfo.getReply_post_id();
 			}
 
+			SnsAppInfo sending_reply_info = new SnsAppInfo();
 			/*
-			 * 보낼 댓글의 정보를 셋팅 한다. 
+			 * 보낼 댓글의 정보를 셋팅 한다.
 			 * */
-			sinfo.setUserId(AppUser.user_id);
-			sinfo.setBody(reply_body);
-			sinfo.setUserName(AppUser.user_name);
-			sinfo.setPhoto(AppUser.user_photo);
+			sending_reply_info.setUserId(AppUser.user_id);
+			sending_reply_info.setBody(reply_body);
+			sending_reply_info.setUserName(AppUser.user_name);
+			sending_reply_info.setPhoto(AppUser.user_photo);
+			sending_reply_info.setGroupId(groupId);
+			sending_reply_info.setPuser_id(puser_id);
+			sending_reply_info.setGroup_name(group_name);
+			
 			if(reply_post_id > 0 ) {
-				sinfo.setPostId(reply_post_id);
-				
-				kloungehttp.sendMessage(sinfo, MESSAGE_MY_LOUNGE, MESSAGE_REPLY_TYPE);
+				sending_reply_info.setPostId(reply_post_id);
+				kloungehttp.sendMessage(sending_reply_info, MESSAGE_MY_LOUNGE, MESSAGE_REPLY_TYPE);
 			}else{
-				kloungehttp.sendMessage(sinfo, MESSAGE_MY_LOUNGE, "");
+				sending_reply_info.setPostId(parent_post_id);
+				kloungehttp.sendMessage(sending_reply_info, MESSAGE_MY_LOUNGE, "");
 			}
 
 			/*
 			 * 전송 완료 라고 글을 변경 한다.
 			 * */
 			publishProgress(mActivity.getResources().getString(R.string.complete_task));
-			
+
+			/*
+			 * 방금 보낸 글이 적용 된 리스트를 받아 온다.
+			 * */
 			replyResultList = kloungehttp.getReplyMessageList(THIS_POST_ID);
 			return replyResultList;
 		}
@@ -366,6 +381,7 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 			}
 
 			progress.dismiss();
+			IS_WRITING_REPLY_TO_USER = false;
 		}
 
 		private View setProgressAndShow(){
@@ -423,6 +439,9 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 			// TODO 리스트에 Adapter 를 적용 한다.
 			super.onPostExecute(result);
 			if(result.size() == 0){
+				/*
+				 * 등록된 댓글이 하나도 없을 때
+				 * */
 				RelativeLayout view = (RelativeLayout)base_view.findViewById(R.id.empty_list_view);
 				view.setVisibility(View.VISIBLE);
 				TextView empty_msg = (TextView)view.findViewById(R.id.empty_list_text);
@@ -495,8 +514,6 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 					progress.dismiss();
 				}
 			},100);
-
 		}
-
 	}
 }

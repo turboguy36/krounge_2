@@ -346,7 +346,7 @@ public class HomeFragment extends SherlockFragment implements OnItemClickListene
 		outState.putString(TAG, "파일 검색");
 		outState.putParcelableArrayList(ALL_DATA_LIST, allDataList);
 	}
-	public class GetDataListTask extends AsyncTask<SearchInfo, TaskProgressInfo, ArrayList<DataInfo>>{
+	private class GetDataListTask extends AsyncTask<SearchInfo, TaskProgressInfo, ArrayList<DataInfo>>{
 		private KLoungeHttpRequest httprequest;
 
 		@Override
@@ -402,11 +402,6 @@ public class HomeFragment extends SherlockFragment implements OnItemClickListene
 				// 모든 자료에 대한 리스트 저장
 				allDataList = data_list;
 
-				Log.d(TAG, "size : " + allDataList.size()
-						+"all: " + publicDataList.size()
-						+"group: " + groupDataList.size()
-						+"my: "+myDataList.size());
-				
 				result = data_list;
 				publishProgress(new TaskProgressInfo(100, "완료 중입니다."));
 			}catch(NullPointerException e){

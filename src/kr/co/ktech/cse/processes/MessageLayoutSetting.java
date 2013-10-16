@@ -9,6 +9,8 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +20,7 @@ import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
@@ -26,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Html;
+import android.text.method.BaseMovementMethod;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +38,7 @@ import android.widget.*;
 import kr.co.ktech.cse.R;
 import kr.co.ktech.cse.CommonUtilities;
 import kr.co.ktech.cse.activity.AttachedDownloadManager;
+import kr.co.ktech.cse.activity.FileSearchListActivity;
 import kr.co.ktech.cse.activity.KLoungeActivity;
 import kr.co.ktech.cse.activity.MyLounge;
 import kr.co.ktech.cse.activity.PersonalLounge;
@@ -43,6 +48,7 @@ import kr.co.ktech.cse.bitmapfun.util.ImageFetcher;
 import kr.co.ktech.cse.db.KLoungeHttpRequest;
 import kr.co.ktech.cse.db.KLoungeRequest;
 import kr.co.ktech.cse.model.AppUser;
+import kr.co.ktech.cse.model.DataInfo;
 import kr.co.ktech.cse.model.NewMessage;
 import kr.co.ktech.cse.model.PostAttachHolder;
 import kr.co.ktech.cse.model.SnsAppInfo;
@@ -134,45 +140,42 @@ public class MessageLayoutSetting{
 		htmlmessage = KLoungeFormatUtil.bodyURLFormat(snsinfo.getBody()).toString();
 		if(htmlmessage.contains(FLAG_IF_REDIRECT_LINK)){
 			// redirectLink 이면서 ck 가 (3 or 4) 일 때 즉, dataListView.jsp 를 요구 할 때
-			// URL 로 가는게 아닌, 파일 다운로드를 직접 할 것을 요구함.
+			// URL 로 가는게 아닌, FileContentViewFragment 로 이동함
 			String post_id = null;
 			String ck = null;
+			String redirect_group_id = null;
 			try{
-				post_id = htmlmessage.substring(htmlmessage.indexOf("?p_id=")+6, htmlmessage.indexOf("&check"));
-				ck = htmlmessage.substring(htmlmessage.indexOf("&check=")+7, htmlmessage.indexOf("&group_id"));
+				
+				int post_id_index = htmlmessage.indexOf("?p_id=")+6;
+				post_id = getParameter(post_id_index);
+				
+				int ck_index = htmlmessage.indexOf("&check=")+7;
+				ck = getParameter(ck_index);
+				
+				int group_id_index = htmlmessage.indexOf("&group_id=") + 10;
+				redirect_group_id = getParameter(group_id_index);
+				
+				if(post_id !=null){
+					download_Pid = Integer.parseInt(post_id);
+				}
+				
 			}catch(StringIndexOutOfBoundsException e){
 				e.printStackTrace();
-			}
-			if(post_id !=null){
-				try{
-					download_Pid = Integer.parseInt(post_id);
-				}catch(NumberFormatException e2){
-					e2.printStackTrace();
-				}
-			}
-			int intCk = -1;
-			try{
-				intCk = Integer.parseInt(ck);
 			}catch(NumberFormatException e1){
 				e1.printStackTrace();
 			}
+			
+			int intCk = -1;
+			intCk = Integer.parseInt(ck);
 			if(intCk == 3 || intCk==4){
-				LinearLayout attachLayout = (LinearLayout)rl.findViewById(R.id.attach_layout);
-				attachLayout.setVisibility(View.VISIBLE);
-
-				attachLayout.setTag(download_Pid);
-				attachLayout.setOnClickListener(attach_layout_click_listener);
-
-				String displayMsg = htmlmessage;
-//				displayMsg = displayMsg.replaceAll("<[^>]*>","");
-//				displayMsg = displayMsg.replaceAll("&nbsp;", "");
-//				displayMsg = displayMsg.replaceAll("&amp;", "&");
-//				displayMsg = displayMsg.replaceAll("&gt;", "<");
-//				displayMsg = displayMsg.replaceAll("&lt;", ">");
-				msg.setText(displayMsg);
+				msg.setTag(R.id.arg1, Integer.parseInt(post_id));
+				msg.setTag(R.id.arg2, Integer.parseInt(redirect_group_id));
+				
+				msg.setText(Html.fromHtml(htmlmessage));
+				msg.setOnClickListener(data_open_listener);
+				msg.setBackgroundResource(R.drawable.reply_txt_selector);
 			}
-		}
-		else{
+		}else{
 			msg.setText(Html.fromHtml(htmlmessage));
 			msg.setMovementMethod(LinkMovementMethod.getInstance());
 		}
@@ -255,7 +258,25 @@ public class MessageLayoutSetting{
 		
 		baseLinearLayout.addView(rl);
 	}
-
+	private String getParameter(final int index){
+		StringBuffer re_gid = new StringBuffer();
+		for(int i=index;i<htmlmessage.length();i++){
+			re_gid.append(htmlmessage.charAt(i));
+			if(!isNumeric(re_gid.toString())){
+				re_gid.deleteCharAt(i - index);
+				break;
+			}
+		}
+		return re_gid.toString();
+	}
+	private boolean isNumeric(String str){  
+		try{  
+			double d = Double.parseDouble(str);  
+		}catch(NumberFormatException nfe){  
+			return false;  
+		}  
+		return true;  
+	}  
 	private class GetFileTask extends AsyncTask<Integer, Void, PostAttachHolder>{
 		ProgressDialog dialog;
 		@Override
@@ -492,6 +513,58 @@ public class MessageLayoutSetting{
 				super.onPostExecute(result);
 			}
 
+		}
+	}
+	View.OnClickListener data_open_listener = new View.OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			int post_id = (Integer)v.getTag(R.id.arg1);
+			int group_id = (Integer)v.getTag(R.id.arg2);
+			new GetDataInfoTask().execute(post_id, group_id);
+		}
+	};
+	class GetDataInfoTask extends AsyncTask<Integer, Void, DataInfo>{
+		KLoungeRequest request;
+		ProgressDialog progress;
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			request = new KLoungeRequest();
+			showProgress();
+		}
+
+		@Override
+		protected DataInfo doInBackground(Integer... params) {
+			// TODO Auto-generated method stub
+			int post_id = params[0];
+			int group_id = params[1];
+			
+			return request.getDataInfo(post_id, group_id, AppUser.user_id);
+		}
+
+		@Override
+		protected void onPostExecute(DataInfo result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			progress.dismiss();
+			
+			Bundle bundle = new Bundle();
+			bundle.putParcelable(FileSearchListActivity.DATA_KEY, result);
+			Intent intent = new Intent(context, FileSearchListActivity.class);
+			intent.putExtras(bundle);
+			
+			context.startActivity(intent);
+		}
+		private void showProgress(){
+			progress = new ProgressDialog(context);
+			progress.setCancelable(true);
+			progress.setCanceledOnTouchOutside(true);
+			progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progress.setMessage("잠시만 기다려 주십시오...");
+			progress.show();
 		}
 	}
 	View.OnClickListener delete_click_listener = new View.OnClickListener() {

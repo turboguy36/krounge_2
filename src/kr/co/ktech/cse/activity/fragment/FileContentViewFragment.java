@@ -95,9 +95,6 @@ public class FileContentViewFragment extends SherlockFragment implements OnClick
 			star_point = (float)dInfo.getPoint()/20;
 			post_id = dInfo.getPostId();
 		}
-		
-		Log.d(TAG, "bPublic: "+dInfo.getBpublic());
-		
 		if(dInfo.getBpublic() > 0){
 			setHasOptionsMenu(true);
 		}else{
@@ -106,10 +103,8 @@ public class FileContentViewFragment extends SherlockFragment implements OnClick
 		//------------------------------------액션바 타이틀 정보------------------------------------//
 		
 		aBar=getSherlockActivity().getSupportActionBar();
-//		TextView title_view = (TextView)aBar.getCustomView().findViewById(R.id.title);
-//		title_view.setText(content_title);
-//		title_view.setSelected(true);
 		aBar.setTitle(content_title);
+		
 		aBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		// file 이름을 title 로 한다. 
 		// selected 로 해 놓아야 만약에 title 이 길어 지면 
@@ -191,7 +186,7 @@ public class FileContentViewFragment extends SherlockFragment implements OnClick
 		new IncreaseCountTask().execute(post_id, read_count);
 		// 조회수 증가
 		
-		new CheckCountTask().execute(post_id, AppUser.user_id);
+		new CheckRatingTask().execute(post_id, AppUser.user_id);
 		// 별점 참여 했는지 안했는지 체크
 		
 		// Listener 들 등록
@@ -357,7 +352,7 @@ public class FileContentViewFragment extends SherlockFragment implements OnClick
 			if(resultCode == Activity.RESULT_OK){
 				int post_id = data.getIntExtra("post_id", -1);
 				int user_id = data.getIntExtra("user_id", -1);
-				new CheckCountTask().execute(post_id, user_id);
+				new CheckRatingTask().execute(post_id, user_id);
 			}else if(resultCode == Activity.RESULT_CANCELED){
 				
 			}
@@ -428,7 +423,7 @@ public class FileContentViewFragment extends SherlockFragment implements OnClick
 		}
 	}
 	
-	class CheckCountTask extends AsyncTask<Integer, Void, ArrayList<Integer>>{
+	class CheckRatingTask extends AsyncTask<Integer, Void, ArrayList<Integer>>{
 		KLoungeRequest httprequest;
 
 		@Override

@@ -72,25 +72,13 @@ public final class CommonUtilities {
 	public static final int TERM_CONDITION = 4003;
 	public static final int VERSION_INFO = 4003;
 	
-	//	public static final String FLAG_NOTIFICATION_GROUP = "toGroup";
-	//	public static final String FLAG_NOTIFICATION_ONE = "toOne";
-	//	public static final String FLAG_NOTIFICATION_REPLY = "reply";
 	public static final String FLAG_BODY_POST = "body";
 	public static final String FLAG_REPLY_POST = "reply";
 	public static final String FLAG_GROUP_LOUNGE = "group";
 	public static final String FLAG_MY_LOUNGE = "my";
 	
-	public static final String contentBG = "#FFFFFF";
-	public static final String tabsBG = "#CFDDE8";
-	public static final String bottomContentBG = "#deedf5";
-	public static final String thickString = "#000000";
-	public static final String lightString = "#757575";
-	public static final String brightString = "#FFFFFF";
-	public static final String bodyString = "#777777";
-	public static final String link_color = "#14148C";
-	public static final String visited_link_color = "#8C008C";
-	public static final String inactive_group = "#767676";
-	public static final String color_active_group = "#0064FF";
+	public static final String TAG_POST_ID = "K_ROUNGE_POST_ID";
+	public static final String TAG_GROUP_ID = "K_ROUNGE_GROUP_ID";
 
 	/**
 	 * Tag used on log messages.

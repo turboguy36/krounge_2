@@ -93,8 +93,6 @@ public class KLoungeActivity extends TabActivity implements OnClickListener{
 		Intent intent = getIntent();
 		String popup_type = intent.getStringExtra("popup_type");
 		String popup_type2 = intent.getStringExtra("popup_type2");
-//		int popup_group_id = intent.getIntExtra("popup_group_id", -1);
-//		int popup_post_id = intent.getIntExtra("popup_super_post_id", -1);
 
 		if(popup_type2 != null){
 			if(popup_type2.equals("body") || !(popup_type.equals("reply"))){
@@ -121,7 +119,6 @@ public class KLoungeActivity extends TabActivity implements OnClickListener{
 		imageView = (ImageView)findViewById(R.id.favicon);
 		textView = (TextView)findViewById(R.id.right_text);
 		imageView.setImageResource(R.drawable.icon_klounge);
-//		imageView.setOnLongClickListener(this);
 		file_search_layout= (LinearLayout)findViewById(R.id.shearch_file_view);
 		file_search_layout.setVisibility(View.VISIBLE);
 		file_search_layout.setOnClickListener(this);

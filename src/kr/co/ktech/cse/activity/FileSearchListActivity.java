@@ -8,30 +8,24 @@ import java.util.Date;
 import java.util.Locale;
 
 import kr.co.ktech.cse.AppConfig;
+import kr.co.ktech.cse.CommonUtilities;
 import kr.co.ktech.cse.R;
 import kr.co.ktech.cse.activity.fragment.FileContentViewFragment;
 import kr.co.ktech.cse.activity.fragment.HomeFragment;
 import kr.co.ktech.cse.activity.fragment.PersonalLoungeFragment;
 import kr.co.ktech.cse.activity.fragment.WriteMessageFragment;
 import kr.co.ktech.cse.bitmapfun.util.Utils;
-import kr.co.ktech.cse.model.AppUser;
 import kr.co.ktech.cse.model.CateInfo;
 import kr.co.ktech.cse.model.DataInfo;
 
 import com.actionbarsherlock.app.ActionBar;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
 /**
  * 
@@ -42,8 +36,6 @@ import android.widget.ImageButton;
 public class FileSearchListActivity extends BaseActivity implements OnClickListener{
 	private String TAG = FileSearchListActivity.class.getSimpleName();
 	private Fragment mContent;
-	private boolean mFlag = false;
-	private final int CLOSE_MESSAGE = 10001;
 	
 	public ArrayList<CateInfo> cateList;
 	public static final String CATEGORY_KEY = "category_array_key";
@@ -65,14 +57,30 @@ public class FileSearchListActivity extends BaseActivity implements OnClickListe
 		}
 		
 		super.onCreate(savedInstanceState);
+		Bundle bundle = getIntent().getExtras();
 		
 		// set the Above View
 		if (savedInstanceState != null){
 			mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
 			Log.d(TAG, "savedInstanceState is not null");
 		}
-		if (mContent == null)
-			mContent = new HomeFragment();
+		
+		if (mContent == null){
+			try{
+				if(bundle != null){
+					DataInfo dInfo = bundle.getParcelable(DATA_KEY);
+
+					if(dInfo != null){
+						mContent = new FileContentViewFragment();
+						mContent.setArguments(bundle);
+					}
+				}else{
+					mContent = new HomeFragment();
+				}
+			}catch(NullPointerException ne){
+				ne.printStackTrace();
+			}
+		}
 		
 		// set the Above View
 		setContentView(R.layout.content_frame);
@@ -83,13 +91,6 @@ public class FileSearchListActivity extends BaseActivity implements OnClickListe
 		.commit();
 		
 		aBar = getSupportActionBar();
-		// set the Behind View
-		try{
-			FrameLayout backbutton = (FrameLayout)aBar.getCustomView().findViewById(R.id.actionbarsherlock_icon);
-			backbutton.setOnClickListener(this);
-		}catch(NullPointerException ne){
-			ne.printStackTrace();
-		}
 	}
 	
 	@Override
@@ -97,20 +98,7 @@ public class FileSearchListActivity extends BaseActivity implements OnClickListe
 		super.onSaveInstanceState(outState);
 		getSupportFragmentManager().putFragment(outState, "mContent", mContent);
 	}
-	
-	private int getActionBarHeight() {
-	    int actionBarHeight = getSupportActionBar().getHeight();
-	    if (actionBarHeight != 0)
-	        return actionBarHeight;
-	    final TypedValue tv = new TypedValue();
-	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-	        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-	            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-	    } else if (getTheme().resolveAttribute(com.actionbarsherlock.R.attr.actionBarSize, tv, true))
-	        actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-	    return actionBarHeight;
-	}
-	
+
 	public void addFragmentToStack(String fragment, DataInfo info) {
         mStackLevel++;
         // Instantiate a new fragment.

@@ -144,7 +144,7 @@ public class ReplyActivity extends FragmentActivity {
 					for(int i=0; i<result.size(); i++) {
 
 						SnsAppInfo sInfo = result.get(i);
-						mls.setReplyLayout(ReplyActivity.this, sInfo, mImageFetcher);
+//						mls.setReplyLayout(ReplyActivity.this, sInfo, mImageFetcher);
 					}
 				}
 				mTask = null;
@@ -225,7 +225,7 @@ public class ReplyActivity extends FragmentActivity {
 							if(replyList.size() > 0) {
 								for(int i=0; i<replyList.size(); i++) {
 									SnsAppInfo sInfo = replyList.get(i);
-									mls.setReplyLayout(ReplyActivity.this, sInfo, mImageFetcher);
+//									mls.setReplyLayout(ReplyActivity.this, sInfo, mImageFetcher);
 								}
 							}
 							
@@ -467,7 +467,7 @@ public class ReplyActivity extends FragmentActivity {
 			}
 		}else if(!attached_file.equals("") && !attached_file.equals("null")){
 			if(AppConfig.DEBUG)Log.d(TAG, "Attach File");
-			makeAttachInformViews(post_id, 0/*CK*/ , user_id, attached_file, attach_views);
+			makeAttachInformViews(post_id, 0 , user_id, attached_file, attach_views);
 			tvMainMessageBody.setText(Html.fromHtml(htmlmessage));
 			tvMainMessageBody.invalidate();
 		}else{

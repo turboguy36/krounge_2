@@ -16,6 +16,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,11 +43,14 @@ public class ShareDataGroupSns extends SherlockFragment{
 	private DataInfo dinfo = new DataInfo();
 	private final int CK = 4;
 	private RelativeLayout base;
-	private AlertDialog.Builder dialog;
 	
 	private String group_name;
 	private int group_id;
 	private ArrayList<GroupInfo> ginfoList;
+	private String[] group_name_items;
+	private ArrayList<Integer> group_id_items;
+	private int choiced_item_num;
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -70,7 +75,6 @@ public class ShareDataGroupSns extends SherlockFragment{
 		 * */
 		setHasOptionsMenu(true);
 		aBar=getSherlockActivity().getSupportActionBar();
-		
 		aBar.setTitle(getActivity().getResources().getString(R.string.share_group_sns));
 		
 		/*
@@ -78,7 +82,6 @@ public class ShareDataGroupSns extends SherlockFragment{
 		 * */
 		try{
 			setDinfo((DataInfo)getArguments().getParcelable(FileSearchListActivity.DATA_KEY));
-			
 		}catch(NullPointerException ne){
 			ne.printStackTrace();
 		}
@@ -90,10 +93,12 @@ public class ShareDataGroupSns extends SherlockFragment{
 		ImageView user_image = (ImageView)base.findViewById(R.id.user_image_view);
 		mImageFetcher.loadImage(AppUser.user_photo, user_image);
 		
+		TextView group_name_guide = (TextView)base.findViewById(R.id.group_name);
+		group_name_guide.setText(mActivity.getResources().getString(R.string.where_to_post));
+		
 		TextView file_info = (TextView)base.findViewById(R.id.data_information);
 		file_info.setText(getDinfo().getTitle());
 		
-		dialog = new AlertDialog.Builder(getActivity());
 		new GetGroupNameTask().execute(getDinfo().getBpublic(), getDinfo().getGroup_id(), AppUser.user_id);
 		
 		return base;
@@ -116,12 +121,10 @@ public class ShareDataGroupSns extends SherlockFragment{
 		// TODO Auto-generated method stub
 		switch(item.getItemId()){
 		case R.id.choose_group:
-			if(dialog != null){
-				dialog.show();
-			}
+			setAlertDialogOnClickGroupList(getGroup_name_items(), getGroup_id_items(), getChoiced_item_num());
 			return true;
 		case R.id.share_button:
-			new ShareDataToServer().execute(getDinfo().getPostId(), CK, getSendGroupId());
+			setAlertDialogOnSendButtonClick();
 			return true;
 		default :
 			return super.onOptionsItemSelected(item);
@@ -144,15 +147,38 @@ public class ShareDataGroupSns extends SherlockFragment{
 	private void setGroupInfoList(ArrayList<GroupInfo> gList){
 		this.ginfoList = gList;
 	}
-	private ArrayList<GroupInfo> getGroupInfoList(){
-		return ginfoList;
+	
+	private String[] getGroup_name_items() {
+		return group_name_items;
 	}
+
+	private void setGroup_name_items(String[] group_name_items) {
+		this.group_name_items = group_name_items;
+	}
+
+	private ArrayList<Integer>  getGroup_id_items() {
+		return group_id_items;
+	}
+
+	private void setGroup_id_items(ArrayList<Integer> group_id_items) {
+		this.group_id_items = group_id_items;
+	}
+
 	private DataInfo getDinfo() {
 		return dinfo;
 	}
 	private void setDinfo(DataInfo dinfo) {
 		this.dinfo = dinfo;
 	}
+	
+	private int getChoiced_item_num() {
+		return choiced_item_num;
+	}
+
+	private void setChoiced_item_num(int choiced_item_num) {
+		this.choiced_item_num = choiced_item_num;
+	}
+	
 	private class GetGroupNameTask extends AsyncTask<Integer, Void, ArrayList<GroupInfo>>{
 		private KLoungeRequest request;
 
@@ -192,19 +218,22 @@ public class ShareDataGroupSns extends SherlockFragment{
 		protected void onPostExecute(ArrayList<GroupInfo> result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			if(result.size() > 1){
+			if(result.size() == 1){
+				setSendGroupName(result.get(0).getGroup_name());
+				setSendGroupId(result.get(0).getGroup_id());
+			}else{
 				List<String> group_names = new ArrayList<String>();
-				List<Integer> group_ids = new ArrayList<Integer>();
+				ArrayList<Integer> group_ids = new ArrayList<Integer>();
 				for(GroupInfo info:result){
 					group_names.add(info.getGroup_name());
 					group_ids.add(info.getGroup_id());
 				}
 				final String [] dialog_items = group_names.toArray(new String[result.size()]);
 				
-				setAlertDialogOnClickGroupList(dialog_items, group_ids);
-				dialog.show();
-			}else{
-				setSendGroupName(result.get(0).getGroup_name());
+				setGroup_id_items(group_ids);
+				setGroup_name_items(dialog_items);
+				
+				setAlertDialogOnClickGroupList(dialog_items, group_ids, 0);
 			}
 		}
 		private ArrayList<GroupInfo> getJoinGroupList(int user_id){
@@ -221,20 +250,54 @@ public class ShareDataGroupSns extends SherlockFragment{
 			
 			return result;
 		}
-		private void setAlertDialogOnClickGroupList(final String[] dialog_items, final List<Integer>group_ids){
-			dialog.setCancelable(true);
-			dialog.setTitle(mActivity.getResources().getString(R.string.select_group_dialog_title));
-			dialog.setItems(dialog_items, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					setSendGroupName(dialog_items[which]);
-					setSendGroupId(group_ids.get(which));
-				}
-			});
-		}
 	}
-	private class ShareDataToServer extends AsyncTask<Integer, Void, Void>{
+	private void setAlertDialogOnClickGroupList(final String[] dialog_items, final List<Integer>group_ids, final int choiced_idx){
+		AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+		dialog.setCancelable(false);
+		dialog.setTitle(mActivity.getResources().getString(R.string.select_group_dialog_title));
+		dialog.setSingleChoiceItems(dialog_items, choiced_idx, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				setSendGroupName(dialog_items[which]);
+				setSendGroupId(group_ids.get(which));
+				setChoiced_item_num(which);
+				
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+	private void setAlertDialogOnSendButtonClick(){
+		final String confirm_button = mActivity.getResources().getString(R.string.text_confirm);
+		final String cancel_button = mActivity.getResources().getString(R.string.text_cancel);
+		final String dialog_title = mActivity.getResources().getString(R.string.send_dialog_title);
+		final String dialog_message = mActivity.getResources().getString(R.string.confirm_send_message);
+		final Drawable iconId = mActivity.getResources().getDrawable(R.drawable.question_icon);
+		
+		AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+		dialog.setCancelable(false);
+		dialog.setTitle(dialog_title);
+		dialog.setIcon(iconId);
+		dialog.setMessage(dialog_message);
+		dialog.setPositiveButton(confirm_button, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				new ShareDataToServer().execute(getDinfo().getPostId(), CK, getSendGroupId());
+				dialog.dismiss();
+			}
+		});
+		dialog.setNegativeButton(cancel_button, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+	private class ShareDataToServer extends AsyncTask<Integer, Void, Boolean>{
 		private KLoungeRequest request;
 		private ProgressDialog progressBar;
 		
@@ -246,48 +309,61 @@ public class ShareDataGroupSns extends SherlockFragment{
 			
 			progressBar = new ProgressDialog(getActivity());
 			progressBar.setCancelable(true);
-			progressBar.setMessage("메시지 전송중...");
+			progressBar.setMessage(mActivity.getResources().getString(R.string.share_data_sending));
 			progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			
 			progressBar.show();
 		}
 
 		@Override
-		protected Void doInBackground(Integer... params) {
+		protected Boolean doInBackground(Integer... params) {
 			// TODO Auto-generated method stub
 			DataInfo dInfo = new DataInfo();
 			dInfo = dinfo;
 			
+			if(getSendGroupName()  == null){
+				// 만약 group name 이 셋팅 되어 있지 않다면
+				return false;
+			}
+			
 			int post_id = params[0];
 			int ck = params[1];
 			int group_id = params[2];
-			String UrlPath = "../common/redirectLink.jsp?p_id="+post_id+"&check="+ck+"&group_id="+group_id;
+			
+			StringBuilder UrlPath = new StringBuilder(); 
+			UrlPath.append("../common/redirectLink.jsp?p_id=")
+					.append(post_id)
+					.append("&check=")
+					.append(ck)
+					.append("&group_id=")
+					.append(group_id);
 			
 			EditText input_text = (EditText)base.findViewById(R.id.edit_text);
-			
 			String body = input_text.getText().toString();
-					//dInfo.getBody();
+			
 			String title = dInfo.getTitle();
+			
 			SnsAppInfo snsinfo = new SnsAppInfo();
 			snsinfo.setUserId(AppUser.user_id);
 			snsinfo.setGroupId(group_id);
-			snsinfo.setBody(makeAnchorTag(UrlPath, body, title));
+			snsinfo.setBody(makeAnchorTag(UrlPath.toString(), body, title));
 			snsinfo.setGroup_name(getSendGroupName());
 			snsinfo.setUserName(dInfo.getUser_name());
 			snsinfo.setPhoto(dInfo.getUser_photo());
 			request.sendMessage(snsinfo, "body", "group");
 			
-			return null;
+			return true;
 		}
 		
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(Boolean result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
 			progressBar.dismiss();
-			
-			((FileSearchListActivity)getActivity()).onBackPressed();
+			if(result){
+				((FileSearchListActivity)getActivity()).onBackPressed();
+			}
 		}
 		
 		private String makeAnchorTag(String path, String body, String title){

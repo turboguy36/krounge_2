@@ -53,15 +53,30 @@ public class KLoungeRequest {
 	public KLoungeRequest() {
 		httprequest = new KLoungeHttpRequest();
 	}
+	public DataInfo getDataInfo(final int post_id, final int group_id, final int user_id){
+		DataInfo result = new DataInfo();
+		
+		try{
+			String addr = httprequest.getService_URL() + "/mobile/appdbbroker/appGetDataInfo.jsp";
+			String param = "group_id="+group_id + "&post_id="+post_id +"&user_id="+user_id;
+			addr = addr + "?" + param;
+
+			String strJson = httprequest.getJSONHttpURLConnection(addr);
+			
+			result = parseDataInfo(strJson);
+			result.setGroup_id(group_id);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public String getGroupName(int group_id){
 		String result = "";
 		try{
 			String addr = httprequest.getService_URL() + "/mobile/appdbbroker/appGetGroupName.jsp";
 			String param = "group_id="+group_id;
 			addr = addr + "?" + param;
-			Log.d(TAG, "addr: "+addr);
 			String strJson = httprequest.getJSONHttpURLConnection(addr);
-			Log.d(TAG, "strJson: "+strJson);
 			try{
 				JSONObject jsonObj = new JSONObject(strJson);
 				JSONObject nameObj = jsonObj.getJSONObject("klounge");
@@ -165,7 +180,6 @@ public class KLoungeRequest {
 			addr = addr+"?"+parameter;
 			String strJSON = httprequest.getJSONHttpURLConnection(addr);
 
-			//strJSON = "{\"klounge\": {\"message\": [{\"post_id\": \"1979\",\"user_id\": \"6\",\"photo\": \"http://www.knowledgetech.co.kr/etrihub/photo/6/2011-05-09 00.52.32.jpg\",\"user_name\": \"양재동\",\"date\": \"2012-09-24 05:20\",\"comment\":\"갤3 볼수록 괜찮네요. 아이폰 진영이 흔들릴수도 있겠다는 `생각이 들었습니다`. 안드로이드 기반 기술을 열심히 축적해야 겠습니다.\", \"attach_file\": \"\",\"reply_count\":\"0\"}]}}";
 			//파싱
 			Log.d(TAG, "MyLoungeMessageList: "+result.toString());
 			result = parseStrJSON(strJSON);
@@ -188,7 +202,6 @@ public class KLoungeRequest {
 
 			//파싱
 			result = parseStrJSON(strJSON);
-			//			Log.i(this.getClass().toString(),strJSON);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -202,11 +215,7 @@ public class KLoungeRequest {
 			String param = "user_id="+user_id;
 			addr = addr + "?" +param;
 
-			Log.d(TAG, "addr: "+addr);
-
 			String strJSON = httprequest.getJSONHttpGet(addr);
-
-			Log.d(TAG, "strJSON : "+strJSON );
 
 			result = parseCategoryJSON(strJSON);
 		}catch (Exception e) {
@@ -218,14 +227,8 @@ public class KLoungeRequest {
 		ArrayList<CateInfo> result = new ArrayList<CateInfo>();
 		try{
 			String addr = httprequest.getService_URL() + "/mobile/appdbbroker/appGetAllSharedFileCategoryList.jsp";
-			//			String param = "user_id="+user_id;
-			//			addr = addr + "?" +param;
-
-			//			Log.d(TAG, "addr: "+addr);
 
 			String strJSON = httprequest.getJSONHttpGet(addr);
-
-			//			Log.d(TAG, "strJSON : "+strJSON );
 
 			result = parseCategoryJSON(strJSON);
 		}catch (Exception e) {
@@ -270,10 +273,8 @@ public class KLoungeRequest {
 			String params = "user_id="+user_id +"&data_cate_id="+data_cate_id+"&query="+URLEncoder.encode(query, "utf-8");
 			addr = addr + "?" + params;
 
-			//			Log.d(TAG, "addr: "+addr);
-
 			String strJSON = httprequest.getJSONHttpGet(addr);
-			result = parseDataInfo(strJSON);
+			result = parseDataInfoList(strJSON);
 
 		}catch(Exception e){
 			e.printStackTrace();
@@ -319,6 +320,32 @@ public class KLoungeRequest {
 		
 		return parseGroupNames(strJSON);
 	}
+	private DataInfo parseDataInfo(String strJson){
+		DataInfo dInfo = new DataInfo();
+
+		JSONObject object;
+		try {
+			object = new JSONObject(strJson);
+
+			JSONObject krounge = object.getJSONObject("klounge");
+			JSONObject data = krounge.getJSONObject("data_list");
+
+			dInfo.setTitle(data.getString("title"));
+			dInfo.setDate(Timestamp.valueOf(data.getString("date")));
+			dInfo.setUser_id(Integer.parseInt(data.getString("user_id")));
+			dInfo.setCount(Integer.parseInt(data.getString("count")));
+			dInfo.setAttach(data.getString("attach"));
+			dInfo.setPostId(Integer.parseInt(data.getString("post_id")));
+			dInfo.setBody(data.getString("body"));
+			dInfo.setPubcate_id(Integer.parseInt(data.getString("pubCateId")));
+			dInfo.setBpublic(Integer.parseInt(data.getString("bPublic")));
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dInfo;
+	}
 	private ArrayList<GroupInfo> parseGroupNames(String strJSON){
 		ArrayList<GroupInfo> result = new ArrayList<GroupInfo>();
 		//파싱
@@ -363,7 +390,7 @@ public class KLoungeRequest {
 		}
 		return result;
 	}
-	private ArrayList<DataInfo> parseDataInfo(String strJSON){
+	private ArrayList<DataInfo> parseDataInfoList(String strJSON){
 		ArrayList<DataInfo> result = new ArrayList<DataInfo>();
 		try{
 			JSONObject jsonObj = new JSONObject(strJSON);

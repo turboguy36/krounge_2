@@ -392,7 +392,7 @@ public class KLoungeMsg extends FragmentActivity implements OnItemSelectedListen
 			// TODO Auto-generated method stub
 			super.onPreExecute();
 			
-			progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleLarge);
+			progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleInverse);
 			int width = ViewGroup.LayoutParams.MATCH_PARENT;
 			int height = ViewGroup.LayoutParams.MATCH_PARENT;
 			LinearLayout.LayoutParams progressParam = new LinearLayout.LayoutParams(width, height);
