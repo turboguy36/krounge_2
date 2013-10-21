@@ -153,27 +153,27 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter{
 				AppConfig.USE_PUSH_MESSAGE = holder.checkbox.isChecked();
 				// 가장 위쪽에 있는 체크박스가 체크 해제되면 모든 푸시 알림이 꺼진다.
 				break;
+//			case 1:
+//				
+//				holder.checkbox.setEnabled(AppConfig.USE_PUSH_MESSAGE);
+//				
+//				holder.sub_text.setVisibility(View.VISIBLE);
+//				holder.sub_text.setText(mContext.getResources().getString(R.string.previewMessage));
+//				break;
 			case 1:
-				
-				holder.checkbox.setEnabled(AppConfig.USE_PUSH_MESSAGE);
-				
-				holder.sub_text.setVisibility(View.VISIBLE);
-				holder.sub_text.setText(mContext.getResources().getString(R.string.previewMessage));
-				break;
-			case 2:
 				
 				holder.checkbox.setEnabled(AppConfig.USE_PUSH_MESSAGE);
 				holder.sub_text.setVisibility(View.VISIBLE);
 				holder.sub_text.setText(mContext.getResources().getString(R.string.group_sns_subtext));
 				break;
-			case 3:
+			case 2:
 				
 				holder.checkbox.setEnabled(AppConfig.USE_PUSH_MESSAGE);
 				
 				holder.sub_text.setVisibility(View.VISIBLE);
 				holder.sub_text.setText(mContext.getResources().getString(R.string.settingSound));
 				break;
-			case 4:
+			case 3:
 				holder.checkbox.setEnabled(AppConfig.USE_PUSH_MESSAGE);
 				break;
 			}
@@ -206,17 +206,17 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter{
 		case 0:
 			key = CommonUtilities.POPUP_SETTING;
 			break;
+//		case 1:
+//			key = CommonUtilities.POPUP_PREVIEW_SETTING;
+//			break;
 		case 1:
-			key = CommonUtilities.POPUP_PREVIEW_SETTING;
-			break;
-		case 2:
 			key = CommonUtilities.POPUP_GROUP_SNS_SETTING;
 			holder.checkbox.setChecked(prefs.getBoolean(key, false));
 			return;
-		case 3:
+		case 2:
 			key = CommonUtilities.POPUP_SOUND_SETTING;
 			break;
-		case 4:
+		case 3:
 			key = CommonUtilities.POPUP_VIBRATE_SETTING;
 			break;
 		}
@@ -244,16 +244,16 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter{
 					editor.commit();
 					notifyDataSetChanged();
 					return;
+//				case 1:
+//					key = CommonUtilities.POPUP_PREVIEW_SETTING;
+//					break;
 				case 1:
-					key = CommonUtilities.POPUP_PREVIEW_SETTING;
-					break;
-				case 2:
 					key = CommonUtilities.POPUP_GROUP_SNS_SETTING;
 					break;
-				case 3:
+				case 2:
 					key = CommonUtilities.POPUP_SOUND_SETTING;
 					break;
-				case 4:
+				case 3:
 					key = CommonUtilities.POPUP_VIBRATE_SETTING;
 					break;
 				}

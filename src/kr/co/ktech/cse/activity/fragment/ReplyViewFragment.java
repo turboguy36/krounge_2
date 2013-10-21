@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -116,7 +117,10 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 		switch(v.getId()){
 		case R.id.input_button:
 			SnsAppInfo sinfo = (SnsAppInfo)v.getTag();
-			new SendMessageTask().execute(sinfo.getPostId(), sinfo.getSuperId(), sinfo.getGroupId(), sinfo.getPuser_id(), sinfo.getGroup_name());
+			
+			// 이글을 쓴 사람이 post user 가 된다.
+			int puser_id = sinfo.getUserId();
+			new SendMessageTask().execute(sinfo.getPostId(), sinfo.getSuperId(), sinfo.getGroupId(), puser_id, sinfo.getGroup_name());
 			break;
 		}
 	}

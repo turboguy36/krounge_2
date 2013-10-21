@@ -27,8 +27,8 @@ import android.os.Environment;
  */
 public final class CommonUtilities {
 	// where this App services 
-//	public static final String SERVICE_URL = "http://www.khub.ac.kr";
-	public static final String SERVICE_URL = "http://210.117.172.166:8080/cse";
+	public static final String SERVICE_URL = "http://www.khub.ac.kr";
+//	public static final String SERVICE_URL = "http://210.117.172.166:8080/cse";
 	public static final String NOPHOTO_URL = SERVICE_URL+ "/images/sns/no_photo_small.gif";
 	
 	public static final String FLAG_IF_REDIRECT_LINK = "/common/redirectLink.jsp?";

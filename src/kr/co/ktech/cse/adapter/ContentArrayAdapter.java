@@ -3,11 +3,13 @@ package kr.co.ktech.cse.adapter;
 import java.util.List;
 
 import kr.co.ktech.cse.R;
+import kr.co.ktech.cse.activity.KLoungeActivity;
 import kr.co.ktech.cse.activity.PersonalLounge;
 import kr.co.ktech.cse.bitmapfun.util.ImageFetcher;
 import kr.co.ktech.cse.model.AppUser;
 import kr.co.ktech.cse.model.SnsAppInfo;
 import kr.co.ktech.cse.util.KLoungeFormatUtil;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -129,10 +131,18 @@ public class ContentArrayAdapter extends BaseAdapter implements OnClickListener{
 			break;
 		
 		}
-		Intent intent = new Intent(context, PersonalLounge.class);
-		intent.putExtra("puser_id", String.valueOf(user_id));
-		intent.putExtra("puser_name", user_name);
-		intent.putExtra("puser_photo", user_photo);
-		context.startActivity(intent);
+		if(AppUser.user_id == user_id){
+			// User 가 자신의 라운지에 가고자 할 때
+			((Activity)context).finish();
+			
+			Log.d(TAG, "shared group id: " +AppUser.SHARED_GROUPID);
+			KLoungeActivity.tabActivity.getTabHost().setCurrentTab(AppUser.MYLOUNGE_TAB);
+		}else{
+			Intent intent = new Intent(context, PersonalLounge.class);
+			intent.putExtra("puser_id", String.valueOf(user_id));
+			intent.putExtra("puser_name", user_name);
+			intent.putExtra("puser_photo", user_photo);
+			context.startActivity(intent);
+		}
 	}
 } 
