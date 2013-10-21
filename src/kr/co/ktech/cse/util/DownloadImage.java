@@ -6,20 +6,26 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import kr.co.ktech.cse.R;
-
+import kr.co.ktech.cse.bitmapfun.util.Utils;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -28,12 +34,13 @@ public class DownloadImage extends Activity{
 	String allURL;
 	String file_name;
 	AnimationDrawable m_anim;
-	private String TAG ="DownloadImage";
-	private int NOTIFICATION_ID = 8010;
+	private String TAG =DownloadImage.class.getSimpleName();
+	private int NOTIFICATION_ID = 9072615;
 	Notification notification;
 	NotificationManager notificationManager;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.download_progress);
 		
@@ -101,6 +108,5 @@ public class DownloadImage extends Activity{
 			}
 			notificationManager.notify(NOTIFICATION_ID, notification);
 		}
-		
 	}
 }

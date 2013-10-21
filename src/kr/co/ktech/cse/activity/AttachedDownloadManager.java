@@ -14,6 +14,7 @@
 package kr.co.ktech.cse.activity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import kr.co.ktech.cse.AppConfig;
@@ -69,12 +70,12 @@ public class AttachedDownloadManager extends Activity implements OnClickListener
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.download_manager);
 
 		httprequest = new KLoungeHttpRequest();
+		
 		mgr=(DownloadManager)getSystemService(DOWNLOAD_SERVICE);
 
 		Bundle bun = getIntent().getExtras();
@@ -126,8 +127,9 @@ public class AttachedDownloadManager extends Activity implements OnClickListener
 	class CancelDownload extends AsyncTask<Void, Void, Void>{
 		@Override
 		protected Void doInBackground(Void... params) {
+			
 			mgr.remove(lastDownload);
-//			unregisterReceiver(onComplete);
+			
 			return null;
 		}
 
@@ -199,6 +201,7 @@ public class AttachedDownloadManager extends Activity implements OnClickListener
 	
 	public void viewFile(View v) {
 		viewFile(this, DOWNLOAD_PATH+"/Download", filename);
+		
 		finish();
 	}
 	/**

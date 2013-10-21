@@ -29,16 +29,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class EditImageViewActivity extends Activity{
 	/*
@@ -49,28 +45,25 @@ public class EditImageViewActivity extends Activity{
 	private static final int RESELECT_IMAGE = 7012;
 	
 	private String TAG = EditImageViewActivity.class.getSimpleName();
-	
-	private ImageView mImage;
-	
 	private Context context;
-	private RelativeLayout wholeView;
-	private LinearLayout bottomBar;
-	private TextView topBar;
-	private Button rotation_img_btn;
-	private Button retake_pic_text;
-	private Button apply_pic_text;
-	
-	private int visible = View.VISIBLE;
-//	private String img_uri;
-	private boolean from_gallery;
-	
-	private int rotation_degree = 90;
 	
 	/*
 	 * 화면에 표시되는 Bitmap 인 동시에,
 	 * WriteMessage 로 돌아 갈 때 jpg 파일을 만들 때 쓰이는 이미지
 	 * */
 	private Bitmap bitmap;
+	
+	private ImageView mImage;
+	private RelativeLayout wholeView;
+	private LinearLayout bottomBar;
+	private TextView topBar;
+	private Button rotation_img_btn;
+	private Button retake_pic_text;
+	private Button apply_pic_text;
+
+	private int visible = View.VISIBLE;
+	private boolean from_gallery;
+	private int rotation_degree = 90;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +78,7 @@ public class EditImageViewActivity extends Activity{
 		
 		// WriteMessage 에서 이미 만들어서 전달한 경로
 		from_gallery = intent.getBooleanExtra("from_gallery", false);
-		// 앨범선택 버튼 | 사진찍기 버튼
+		
 		makeView(); 
 	}
 
@@ -99,58 +92,28 @@ public class EditImageViewActivity extends Activity{
 		bottomBar = (LinearLayout)wholeView.findViewById(R.id.bottom_bar_editimage);
 		rotation_img_btn = (Button)bottomBar.findViewById(R.id.btn_rotation_img);
 		retake_pic_text = (Button)bottomBar.findViewById(R.id.retake_picture);
+		
 		if(from_gallery){
 			// gallery 에서 선택한 뒤라면
 			retake_pic_text.setText("다시 선택");
 		}
 		
 		apply_pic_text = (Button)bottomBar.findViewById(R.id.attach_this_picture);
-
-		BitmapFactory.Options bfo = new BitmapFactory.Options();
-		bfo.inSampleSize = 2;
+		
 		if(img_uri.contains("http://") || img_uri.contains("https://")){
 			// Facebook 이나 백업 cloud 와 같은 online 사진을 선택 했을 경우
 			GetImageBitmapTask gTask = new GetImageBitmapTask();
 			gTask.execute(img_uri);
 		}else{
-			
-			bitmap = BitmapFactory.decodeFile(img_uri, bfo);
-			try{
-				ExifInterface exif;
-				exif = new ExifInterface(img_uri);
-				int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-
-				float angle = 0;
-				switch(orientation){
-				case 3:
-					angle = 180;
-					break;
-				case 6:
-					angle = 90;
-					break;
-				case 8:
-					angle = 270;
-					break;
-				}
-				Matrix matrix = new Matrix();
-				matrix.postRotate(angle);
-				bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),matrix, true);
-			}catch(IOException e){
-				Log.e(TAG, "EXIF IOException");
-				e.printStackTrace();
-			}catch(NullPointerException ne){
-				Log.e(TAG, "NullPointerException - "+ne);
-			}
 			mImage = (ImageView)findViewById(R.id.oneEditImage);
-			//		mImage.setDisplayType(DisplayType.FIT_TO_SCREEN);
-			mImage.setImageBitmap(bitmap);//(Uri.parse(img_uri));
+			mImage.setImageBitmap(getOriginAngleBitmap(img_uri));
 			mImage.setTag(img_uri);
 			
 			mImage.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					visible = (visible == View.VISIBLE) ? View.GONE : View.VISIBLE;
-					setVisibilityOfControls(visible);
+					setVisibilityOfControlers(visible);
 				}
 			});
 		}
@@ -158,9 +121,43 @@ public class EditImageViewActivity extends Activity{
 		apply_pic_text.setOnClickListener(mApplyImageClickListener);
 		retake_pic_text.setOnClickListener(mRetakeImageClickListener);
 	}
-	
 
-	private void setVisibilityOfControls(int visibility) {
+	private Bitmap getOriginAngleBitmap(String img_url){
+		BitmapFactory.Options bfo = new BitmapFactory.Options();
+		bfo.inSampleSize = 2;
+		Bitmap oBitmap = BitmapFactory.decodeFile(img_url, bfo);
+		
+		try{
+			ExifInterface exif;
+			exif = new ExifInterface(img_url);
+			int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+
+			float angle = 0;
+			switch(orientation){
+			case 3:
+				angle = 180;
+				break;
+			case 6:
+				angle = 90;
+				break;
+			case 8:
+				angle = 270;
+				break;
+			}
+			Matrix matrix = new Matrix();
+			matrix.postRotate(angle);
+			oBitmap = Bitmap.createBitmap(oBitmap, 0, 0, oBitmap.getWidth(), oBitmap.getHeight(),matrix, true);
+		}catch(IOException e){
+			Log.e(TAG, "EXIF IOException");
+			e.printStackTrace();
+		}catch(NullPointerException ne){
+			Log.e(TAG, "NullPointerException - "+ne);
+		}
+		bitmap = oBitmap;
+		return oBitmap;
+	}
+
+	private void setVisibilityOfControlers(int visibility) {
 		// TODO Auto-generated method stub
 		bottomBar.setVisibility(visibility);
 		topBar.setVisibility(visibility);
@@ -204,18 +201,7 @@ public class EditImageViewActivity extends Activity{
 			}
 		}
 	};
-	/*
-	Button.OnClickListener mCropImageClickListener =
-			new Button.OnClickListener(){
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent("com.android.camera.action.CROP");
-			intent.setDataAndType(Uri.parse(img_uri), "image/*");
-			intent.putExtra("output", Uri.parse(img_uri));
-			startActivityForResult(intent, 7004);
-		}
-	};
-*/
+	
 	Button.OnClickListener mRetakeImageClickListener =
 			new Button.OnClickListener(){
 		@Override
@@ -236,24 +222,20 @@ public class EditImageViewActivity extends Activity{
 			}
 		}
 	};
-	public Bitmap rotate(int degrees)
-	{
-		if(degrees != 0 && bitmap != null)
-		{
+	
+	public Bitmap rotate(int degrees){
+		if(degrees != 0 && bitmap != null){
 			Matrix m = new Matrix();
 			m.setRotate(degrees, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
-			try
-			{
+			try{
 				Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0,
 						bitmap.getWidth(), bitmap.getHeight(), m, true);
-				if(bitmap != converted)
-				{
+				if(bitmap != converted){
 					bitmap.recycle();
 					bitmap = converted;
 				}
 			}
-			catch(OutOfMemoryError ex)
-			{
+			catch(OutOfMemoryError ex){
 				// 메모리가 부족하여 회전을 시키지 못할 경우 그냥 원본을 반환합니다.
 			}
 		}
@@ -276,11 +258,8 @@ public class EditImageViewActivity extends Activity{
 			bitmap = BitmapFactory.decodeFile(img_uri_res);
 			break;
 		case RETAKE_IMAGE:
-			BitmapFactory.Options bfo = new BitmapFactory.Options();
-			bfo.inSampleSize = 2;
 			String img_uri_cam = (String)mImage.getTag();
-			bitmap = BitmapFactory.decodeFile(img_uri_cam, bfo);
-			mImage.setImageURI(Uri.parse(img_uri_cam));
+			mImage.setImageBitmap(getOriginAngleBitmap(img_uri_cam));
 			break;
 		case GALLERY_IMAGE:
 			Uri selectedData = data.getData();
@@ -376,7 +355,7 @@ public class EditImageViewActivity extends Activity{
 				@Override
 				public void onClick(View v) {
 					visible = (visible == View.VISIBLE) ? View.GONE : View.VISIBLE;
-					setVisibilityOfControls(visible);
+					setVisibilityOfControlers(visible);
 				}
 			});
 		}

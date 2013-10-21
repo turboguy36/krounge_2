@@ -3,11 +3,9 @@ package kr.co.ktech.cse.activity.fragment;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.Inflater;
 
 import kr.co.ktech.cse.R;
 import kr.co.ktech.cse.activity.ReplyViewDialog;
-import kr.co.ktech.cse.activity.WriteMessage;
 import kr.co.ktech.cse.adapter.ContentArrayAdapter;
 import kr.co.ktech.cse.bitmapfun.util.ImageFetcher;
 import kr.co.ktech.cse.bitmapfun.util.Utils;
@@ -18,39 +16,26 @@ import kr.co.ktech.cse.model.ToReplyInfo;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
-import android.text.InputType;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout.LayoutParams;
 
@@ -64,7 +49,7 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 	private RelativeLayout base_view;
 	private int THIS_POST_ID;
 
-	// 유저를 태그 하고 글 작성 중인지 판별
+	// 유저를 태그 하여 글 작성 중인지 판별
 	private boolean IS_WRITING_REPLY_TO_USER = false;
 	
 	@Override
@@ -112,7 +97,6 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 		 * */
 		ListView listview = (ListView)base_view.findViewById(R.id.reply_list);
 		listview.setOnItemClickListener(this);
-
 		if(snsinfo != null){
 			try{
 				int post_id = snsinfo.getPostId();
@@ -233,7 +217,8 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 				text_view.setLayoutParams(text_param);
 
 				if(IS_WRITING_REPLY_TO_USER){
-					IS_WRITING_REPLY_TO_USER = false;	
+					IS_WRITING_REPLY_TO_USER = false;
+					text_view.setTag(null);
 				}
 			}
 		}
@@ -364,6 +349,8 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 			 * 등록된 댓글들의 실제 내용 셋팅
 			 * */
 			if(result.size() > 0) {
+				RelativeLayout view = (RelativeLayout)base_view.findViewById(R.id.empty_list_view);
+				view.setVisibility(View.GONE);
 				ContentArrayAdapter adapter = new ContentArrayAdapter(mActivity, mImageFetcher, result);
 				ListView listview = (ListView)mActivity.findViewById(R.id.reply_list);
 				listview.setAdapter(adapter);
@@ -382,6 +369,7 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 
 			progress.dismiss();
 			IS_WRITING_REPLY_TO_USER = false;
+			reply_text.setTag(null);
 		}
 
 		private View setProgressAndShow(){
@@ -461,7 +449,7 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 	private class DeleteMessageTask extends AsyncTask<Integer, Void, List<SnsAppInfo>>{
 		private ProgressDialog progress;
 		private final int REPLY_MESSAGE = 0;
-		KLoungeRequest kreq;
+		private KLoungeRequest kreq;
 
 		@Override
 		protected void onPreExecute() {
@@ -507,6 +495,16 @@ public class ReplyViewFragment extends SherlockFragment implements OnClickListen
 			ListView listview = (ListView)mActivity.findViewById(R.id.reply_list);
 			listview.setAdapter(adapter);
 
+			/*
+			 * 등록된 댓글이 하나도 없을 때
+			 * */
+			if(result.size() == 0){
+				RelativeLayout view = (RelativeLayout)base_view.findViewById(R.id.empty_list_view);
+				view.setVisibility(View.VISIBLE);
+				TextView empty_msg = (TextView)view.findViewById(R.id.empty_list_text);
+				empty_msg.setText(mActivity.getResources().getString(R.string.reply_empty_text));
+			}
+			
 			Handler handler = new Handler();
 			handler.postDelayed(new Runnable() {
 				@Override

@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import kr.co.ktech.cse.AppConfig;
-import kr.co.ktech.cse.CommonUtilities;
 import kr.co.ktech.cse.R;
 import kr.co.ktech.cse.activity.fragment.FileContentViewFragment;
 import kr.co.ktech.cse.activity.fragment.HomeFragment;
@@ -17,8 +16,6 @@ import kr.co.ktech.cse.activity.fragment.WriteMessageFragment;
 import kr.co.ktech.cse.bitmapfun.util.Utils;
 import kr.co.ktech.cse.model.CateInfo;
 import kr.co.ktech.cse.model.DataInfo;
-
-import com.actionbarsherlock.app.ActionBar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -44,7 +41,7 @@ public class FileSearchListActivity extends BaseActivity implements OnClickListe
 	public static final String DATA_KEY = "DATA_INFORMATION";
 	int mStackLevel = 0;
 	
-	private ActionBar aBar;
+//	private ActionBar aBar;
 	
 	public FileSearchListActivity() {
 		super(R.string.file_search_button_text);
@@ -90,7 +87,7 @@ public class FileSearchListActivity extends BaseActivity implements OnClickListe
 		.replace(R.id.content_frame, mContent)
 		.commit();
 		
-		aBar = getSupportActionBar();
+//		aBar = getSupportActionBar();
 	}
 	
 	@Override

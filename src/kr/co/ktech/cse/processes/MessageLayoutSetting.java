@@ -7,8 +7,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -211,7 +216,7 @@ public class MessageLayoutSetting{
 				added_image.setOnClickListener(play_video_click_listener);
 				play_video_btn.setOnClickListener(play_video_click_listener);
 			}else{
-				AppClickListener acListener = new AppClickListener(snsinfo, context);//new AppClickListener(added_imageurl, replyCount, htmlmessage);
+				AppClickListener acListener = new AppClickListener(snsinfo, context);
 				added_image.setOnClickListener(acListener);
 			}
 		}
@@ -648,6 +653,7 @@ public class MessageLayoutSetting{
 			}
 		}
 	};
+	
 	View.OnClickListener play_video_click_listener = new View.OnClickListener() {
 		
 		@Override

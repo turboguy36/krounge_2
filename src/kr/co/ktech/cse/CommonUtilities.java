@@ -27,8 +27,8 @@ import android.os.Environment;
  */
 public final class CommonUtilities {
 	// where this App services 
-	public static final String SERVICE_URL = "http://www.khub.ac.kr";
-//	public static final String SERVICE_URL = "http://210.117.172.166:8080/cse";
+//	public static final String SERVICE_URL = "http://www.khub.ac.kr";
+	public static final String SERVICE_URL = "http://210.117.172.166:8080/cse";
 	public static final String NOPHOTO_URL = SERVICE_URL+ "/images/sns/no_photo_small.gif";
 	
 	public static final String FLAG_IF_REDIRECT_LINK = "/common/redirectLink.jsp?";
@@ -80,6 +80,7 @@ public final class CommonUtilities {
 	public static final String TAG_POST_ID = "K_ROUNGE_POST_ID";
 	public static final String TAG_GROUP_ID = "K_ROUNGE_GROUP_ID";
 
+	public static final String SNS_APP_INFO = "SNS_APP_INFO";
 	/**
 	 * Tag used on log messages.
 	 */

@@ -57,21 +57,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onRegistered(Context context, String registrationId) {
 		boolean succeed = false;
 		
-//		Log.i(LOG_TAG, "onRegistered-registrationId = " + registrationId + " / " +AppUser.user_id);
-		
 		displayMessage(context, getString(R.string.gcm_registered));
 		if(AppConfig.PUSH){
 			succeed = ServerUtilities.register(context, registrationId, AppUser.user_id);
 		}
 		if(succeed){
-//			Log.d(LOG_TAG, "Registration is succeeded");
 		}
 	}
 
 	@Override
 	protected void onUnregistered(Context context, String registrationId) {
-		//if (BuildConfig.DEBUG) Log.d(LOG_TAG, "onUnregistered-registrationId = " + registrationId);
-//		Log.i(LOG_TAG, "onUnregistered-registrationId = " + registrationId);
 		displayMessage(context, getString(R.string.gcm_unregistered));
 		if (GCMRegistrar.isRegisteredOnServer(context)){
 			if(AppConfig.PUSH){
@@ -80,7 +75,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		}else{
 			// This callback results from the call to unregister made on
 			// ServerUtilities when the registration to the server failed.
-//			Log.i(LOG_TAG, "Ignoring unregister callback");
 		}
 
 	}
@@ -104,48 +98,21 @@ public class GCMIntentService extends GCMBaseIntentService {
 		String message = intent.getStringExtra("message");		
 		
 		SnsAppInfo snsinfo = new SnsAppInfo();
-			
-			snsinfo.setGroupId(group_id);
-			snsinfo.setGroup_name(group_name);
-			snsinfo.setSuperId(post_super_id);
-			snsinfo.setUserId(user_id);
-			snsinfo.setUserName(user_name);
-			snsinfo.setPhoto(user_photo);
-			snsinfo.setBody(message);
-			if(photo_video!=null){
-				snsinfo.setPhotoVideo(photo_video);
-			}
-			
+
+		snsinfo.setGroupId(group_id);
+		snsinfo.setGroup_name(group_name);
+		snsinfo.setSuperId(post_super_id);
+		snsinfo.setUserId(user_id);
+		snsinfo.setUserName(user_name);
+		snsinfo.setPhoto(user_photo);
+		snsinfo.setBody(message);
+		
+		if(photo_video!=null){
+			snsinfo.setPhotoVideo(photo_video);
+		}
+
 		//with declaring broadcast receivers
 		displayMessage(context, message);
-
-		// if ConversationActivity is active, 
-		// send a message to handler to refresh the conversation
-		GCMInfo gcmInfo = new GCMInfo();
-			gcmInfo.setGroupId(group_id);
-			gcmInfo.setGroup_name(group_name);
-			gcmInfo.setSuperId(post_super_id);
-			gcmInfo.setUserId(user_id);
-			gcmInfo.setUserName(user_name);
-			gcmInfo.setPhoto(user_photo);
-			gcmInfo.setBody(message);
-			gcmInfo.setType(type);
-			gcmInfo.setType2(type2);
-			gcmInfo.setPhotoVideo(photo_video);
-
-		// while focused on this proccess
-			/*
-		if(ActiveMessageHandler.instance().getActivity() != null)
-		{
-			Message msg = Message.obtain(ActiveMessageHandler.instance());
-
-			msg.what = FROM_SERVICE_ON_MESSAGE;
-			msg.obj = gcmInfo;
-
-			ActiveMessageHandler.instance().sendMessage(msg);
-		}
-*/
-		gcmInfo = null;
 
 		// 상태 파악
 		if(isRunningProcess(context, context.getPackageName())){
@@ -166,7 +133,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			// 만약 팝업 알림 설정이 켜져있으면 실행한다.
 			if (prefs.getBoolean(CommonUtilities.POPUP_PREVIEW_SETTING, false)) {
 				boolean group_sns = prefs.getBoolean(CommonUtilities.POPUP_GROUP_SNS_SETTING, false);
-				Log.d(TAG, "type2: "+type2 +" /"+group_sns);
+				
 				if(type2.equalsIgnoreCase("group") && !(group_sns)){
 					// Group SNS 글은 받아보지 원치 않는다면(기본)
 					return;
@@ -415,7 +382,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 				noti.flags |= Notification.FLAG_AUTO_CANCEL;
 				NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
 				notificationManager.notify(NOTIFICATION_ID, noti);
 			}else if(!(small_text.equals("") || small_text.length() == 0)){
 //				 글이 매우 긴 게시물 이라면 Big Text Notification
@@ -439,8 +405,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 				notificationManager.notify(NOTIFICATION_ID, noti);
 			}else{
-				Notification.Builder noti_builder = new Notification.Builder(context);
-				noti_builder
+				Notification noti_builder = new Notification.Builder(context)
 				.setContentTitle(title)
 				.setContentText(big_text)
 				.setContentIntent(pi)
@@ -449,12 +414,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 				.setTicker(getResources().getString(R.string.krounge_message))
 				.setDefaults(notification_default)
 				.setNumber(pendingNotificationsCount)
-				.setWhen(System.currentTimeMillis());
+				.setWhen(System.currentTimeMillis()).build();
 				
-				Notification noti = noti_builder.getNotification();
-				noti.flags |= Notification.FLAG_AUTO_CANCEL;
 				NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-				notificationManager.notify(NOTIFICATION_ID, noti);
+				notificationManager.notify(NOTIFICATION_ID, noti_builder);
 			}
 		}catch(Exception e){
 			Log.e(LOG_TAG, "[setNotification] Exception : " + e.getMessage());

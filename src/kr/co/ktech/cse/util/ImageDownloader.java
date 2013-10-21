@@ -26,25 +26,18 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
-import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,11 +47,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
-
-import kr.co.ktech.cse.R;
-import kr.co.ktech.cse.model.AppUser;
-import kr.co.ktech.cse.model.SnsAppInfo;
 
 /**
  * This helper class download images from the Internet and binds those with the provided ImageView.
@@ -77,7 +67,8 @@ public class ImageDownloader {
 	int IMAGE_MAX_SIZE_W = 600;
 	int IMAGE_MAX_SIZE_H = 800;
 
-	private Handler aniHandler;
+//	private Handler aniHandler;
+	
 	public ImageDownloader(Context context){
 		Display display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		int displayWidth = display.getWidth();
@@ -112,7 +103,6 @@ public class ImageDownloader {
 			cancelPotentialDownload(url, imageView);
 			imageView.setImageBitmap(bitmap);
 		}
-
 	}
 
 	/*
@@ -137,7 +127,7 @@ public class ImageDownloader {
 			switch (mode) {
 			case NO_ASYNC_TASK:
 				Bitmap bitmap = null;
-				String imgext = url.substring(url.lastIndexOf(".")+1).toLowerCase();
+				String imgext = url.substring(url.lastIndexOf(".")+1).toLowerCase(Locale.ENGLISH);
 				if(imgext.equals("bmp")) {
 					bitmap = loadImageFromUrl(url);
 				} else bitmap = downloadBitmap(url);
@@ -161,25 +151,25 @@ public class ImageDownloader {
 		}
 	}
 	
-	private void startLoadImageAniThread(final ImageView imageView) {  
-		Thread thread = new Thread(new Runnable() {
-
-			public void run() {
-				try {
-					Log.i("Scale Type", imageView.getScaleType().name());
-					//					imageView.setScaleType(ScaleType.CENTER);
-					//					imageView.setBackgroundResource(R.drawable.load_animation);
-					AnimationDrawable animation = (AnimationDrawable)imageView.getBackground();
-					animation.start();
-
-					//aniHandler.sendEmptyMessageDelayed(0, 50);
-				} catch (Exception e) {
-					Log.w("loading_img", e);
-				}
-			}
-		});
-		thread.start();
-	}
+//	private void startLoadImageAniThread(final ImageView imageView) {  
+//		Thread thread = new Thread(new Runnable() {
+//
+//			public void run() {
+//				try {
+//					Log.i("Scale Type", imageView.getScaleType().name());
+//					//					imageView.setScaleType(ScaleType.CENTER);
+//					//					imageView.setBackgroundResource(R.drawable.load_animation);
+//					AnimationDrawable animation = (AnimationDrawable)imageView.getBackground();
+//					animation.start();
+//
+//					//aniHandler.sendEmptyMessageDelayed(0, 50);
+//				} catch (Exception e) {
+//					Log.w("loading_img", e);
+//				}
+//			}
+//		});
+//		thread.start();
+//	}
 	/**
 	 * Returns true if the current download has been canceled or if there was no download in
 	 * progress on this image view.
@@ -222,7 +212,7 @@ public class ImageDownloader {
 		final HttpClient client = (mode == Mode.NO_ASYNC_TASK) ? new DefaultHttpClient() : AndroidHttpClient.newInstance("Android");
 		final HttpGet getRequest = new HttpGet(url);
 
-		Bitmap imgBitmap = null;
+//		Bitmap imgBitmap = null;
 		Bitmap imgSrcBitmap = null;
 
 		try {
@@ -380,7 +370,7 @@ public class ImageDownloader {
 			//startLoadImageAniThread(imageView);
 
 			url = params[0];
-			String imgext = url.substring(url.lastIndexOf(".")+1).toLowerCase();
+			String imgext = url.substring(url.lastIndexOf(".")+1).toLowerCase(Locale.ENGLISH);
 			if(imgext.equals("bmp")) {
 				return loadImageFromUrl(url);
 			} 

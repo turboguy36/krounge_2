@@ -1,14 +1,11 @@
 package kr.co.ktech.cse.listener;
 
-import kr.co.ktech.cse.activity.PersonalLounge;
 import kr.co.ktech.cse.activity.TouchImageViewActivity;
 import kr.co.ktech.cse.activity.TouchUserImageViewActivity;
 import kr.co.ktech.cse.model.SnsAppInfo;
-import android.R.bool;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
