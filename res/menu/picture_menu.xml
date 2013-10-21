@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/pic_down" android:title="@string/text_start_download" ></item>
-<!--     <item android:id="@+id/pic_copy" android:title="copy"></item>  -->
-    <item android:id="@+id/pic_cancel" android:title="@string/text_cancel"></item>
-
+    <item 
+        android:id="@+id/pic_down" 
+        android:title="@string/text_start_download" />
+    <item 
+        android:id="@+id/pic_cancel" 
+        android:title="@string/text_cancel"/>
 </menu>
