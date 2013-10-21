@@ -35,7 +35,6 @@
     </string-array>
     <string-array name="popup_detail_settings">
         <item>알림 사용</item>
-        <item>알림 시 팝업으로 보기</item>
         <item>그룹 SNS 알림</item>
         <item>소리로 알림</item>
         <item>진동으로 알림</item>
