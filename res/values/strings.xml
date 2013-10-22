@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, KLoungeActivity!</string>
-    <string name="app_name">K-Rounge for CSE</string>
+    <string name="app_name">K-Rounge for KHUB</string>
     <string name="app_name_ko">K-라운지</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
