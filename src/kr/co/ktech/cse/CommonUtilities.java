@@ -27,8 +27,8 @@ import android.os.Environment;
  */
 public final class CommonUtilities {
 	// where this App services 
-	public static final String SERVICE_URL = "http://www.khub.ac.kr";
-//	public static final String SERVICE_URL = "http://210.117.172.166:8080/cse";
+	public static final String SERVICE_URL = "http://www.khub.kr";
+//	public static final String SERVICE_URL = "http://210.117.172.166:8080/khub";
 	public static final String NOPHOTO_URL = SERVICE_URL+ "/images/sns/no_photo_small.gif";
 	
 	public static final String FLAG_IF_REDIRECT_LINK = "/common/redirectLink.jsp?";
@@ -89,7 +89,7 @@ public final class CommonUtilities {
 	/**
 	 * Intent used to display a message in the screen.
 	 */
-	public static final String DISPLAY_MESSAGE_ACTION = "kr.co.ktech.cse.DISPLAY_MESSAGE";
+	public static final String DISPLAY_MESSAGE_ACTION = "kr.khub.DISPLAY_MESSAGE";
 
 	/**
 	 * Intent's extra that contains the message to be displayed.
