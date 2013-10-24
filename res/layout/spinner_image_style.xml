@@ -9,7 +9,7 @@
         android:id="@+id/spinner_text_dropdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-	<kr.khub.util.BadgeView
+	<kr.co.ktech.cse.util.BadgeView
 	    android:id="@+id/badgeview_spinner"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
