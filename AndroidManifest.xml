@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.co.ktech.cse"
-    android:versionCode="254"
-    android:versionName="0.2.5.4" >
+    android:versionCode="255"
+    android:versionName="0.2.5.5" >
 
     <uses-sdk
         android:minSdkVersion="9"

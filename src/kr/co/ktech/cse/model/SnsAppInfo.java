@@ -103,16 +103,14 @@ public class SnsAppInfo extends SnsInfo implements Parcelable {
 		reply_count = in.readInt();
 	}
 
-	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+	public static final Parcelable.Creator<SnsAppInfo> CREATOR = new Parcelable.Creator<SnsAppInfo>() {
+		@Override
 		public SnsAppInfo createFromParcel(Parcel in) {
 			return new SnsAppInfo(in);
 		}
-
+		@Override
 		public SnsAppInfo[] newArray(int size) {
 			return new SnsAppInfo[size];
 		}
 	};
-
-
-
 }

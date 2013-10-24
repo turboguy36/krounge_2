@@ -350,7 +350,7 @@ public class FileDownloadManager extends Activity implements OnClickListener{
 		}
 		showMessage.append("\""+filename+"\"\n를(을) ")
 				.append(DOWNLOAD_PATH).append("/").append(Environment.DIRECTORY_DOWNLOADS)
-				.append(" 폴더로 다운로드 합니다. 계속 진행하시겠습니까?");
+				.append("경로에 다운로드 합니다. \n계속 진행하시겠습니까?");
 //				.append(notiMessage);
 		if(filename == null){
 			showMessage.setLength(0);
